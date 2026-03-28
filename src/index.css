@@ -61,6 +61,45 @@ body {
   box-shadow: var(--baseShadow);
 }
 
+/* Card */
+.card {
+  width: 200px;
+  padding: var(--size-small);
+  border-radius: var(--size-smaller);
+  box-shadow: var(--baseShadow);
+  background-color: var(--white);
+
+  & > .card-header {
+    font-size: 0.75rem;
+    font-weight: 400;
+
+    & > .card-sub {
+      font-weight: var(--weight);
+    }
+  }
+}
+
+.card-meter {
+  width: 100%;
+  height: var(--size-micro);
+  background-color: var(--gray01);
+  overflow: hidden;
+
+  & > .card-meter-fill {
+    height: 2px;
+
+    &.green {
+      background-color: var(--success);
+    }
+    &.yellow {
+      background-color: var(--warn);
+    }
+    &.red {
+      background-color: var(--error);
+    }
+  }
+}
+
 /* :root {
   --text: #6b6375;
   --text-h: #08060d;
