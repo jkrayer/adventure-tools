@@ -26,6 +26,7 @@
   --size-smaller: 0.25rem;
   --size-small: 0.5rem;
   --size-medium: 1rem;
+  --size-large: 2rem;
   /* Shadows */
   --baseShadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
   --overShadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
@@ -40,6 +41,24 @@ body {
   font-family: var(--family);
   font-weight: var(--weight);
   background-color: var(--gray01);
+}
+
+/* button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  appearance: none;
+}
+
+.btn-circle {
+  width: var(--size-large);
+  height: var(--size-large);
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--baseShadow);
 }
 
 /* :root {
