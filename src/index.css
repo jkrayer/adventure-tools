@@ -80,7 +80,7 @@ body {
   background-color: var(--white);
 
   .card-header {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 400;
 
     .card-sub {
@@ -182,6 +182,76 @@ body {
     width: 100%;
     min-width: 0;
   }
+}
+
+.menu {
+  margin: 0;
+  padding: 0;
+  background-color: var(--white);
+  list-style: none;
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: var(--size-small);
+  border: none;
+  border-radius: var(--size-micro);
+  margin: 1px 0;
+  font-family: var(--family);
+  text-align: left;
+  background-color: transparent;
+  list-style: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-out;
+
+  &:hover {
+    background-color: var(--infoLight);
+  }
+
+  &:active {
+    background-color: var(--info);
+  }
+
+  &:disabled {
+    color: var(--gray50);
+    background-color: var(--gray02);
+    cursor: not-allowed;
+  }
+}
+
+.menu-submenu {
+  list-style: none;
+}
+
+.menu-submenu-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menu-submenu-caret {
+  color: var(--gray50);
+  transition: transform 0.2s ease-out;
+}
+
+.menu-submenu-caret.open {
+  transform: rotate(90deg);
+}
+
+.menu-nested {
+  max-height: 0;
+  overflow: hidden;
+  margin-left: var(--size-medium);
+  opacity: 0;
+  transition:
+    max-height 0.25s ease-out,
+    opacity 0.2s ease-out;
+}
+
+.menu-nested.open {
+  max-height: 20rem;
+  opacity: 1;
 }
 
 /* :root {

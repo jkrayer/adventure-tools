@@ -1,12 +1,12 @@
-import { CircleButton } from "./components/CircleButton";
+import LightMenu from "./components/LightMenu";
 import Players from "./components/Players";
 import "./App.css";
 
 function App() {
   return (
     <div className="App">
-      <CircleButton>+</CircleButton>
       <Players />
+      <LightMenu />
     </div>
   );
 }
