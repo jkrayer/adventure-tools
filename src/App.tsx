@@ -1,4 +1,5 @@
-import LightMenu from "./components/LightMenu";
+import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
+import ActionTray from "./components/ActionTray";
 import Players from "./components/Players";
 import "./App.css";
 
@@ -6,7 +7,9 @@ function App() {
   return (
     <div className="App">
       <Players />
-      <LightMenu />
+      <ActionTray>
+        <DungeonTimeTracker />
+      </ActionTray>
     </div>
   );
 }

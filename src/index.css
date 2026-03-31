@@ -71,6 +71,17 @@ body {
   }
 }
 
+.btn-plus-icon rect,
+.btn-plus-icon polygon {
+  fill: var(--gray50);
+  transition: fill 0.2s ease-out;
+}
+
+.btn-circle:hover .btn-plus-icon rect,
+.btn-circle:hover .btn-plus-icon polygon {
+  fill: var(--white);
+}
+
 /* Card */
 .card {
   width: 200px;
@@ -252,6 +263,19 @@ body {
 .menu-nested.open {
   max-height: 20rem;
   opacity: 1;
+}
+
+.tray {
+  position: fixed;
+  padding: var(--size-medium);
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.tray-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--size-small);
+  inset: auto var(--size-medium) var(--size-medium);
 }
 
 /* :root {

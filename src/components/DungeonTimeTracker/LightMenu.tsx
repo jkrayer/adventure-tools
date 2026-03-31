@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import Menu from "./Menu";
+import Menu from "../Menu";
 
 export default function LightMenu() {
   // characters
