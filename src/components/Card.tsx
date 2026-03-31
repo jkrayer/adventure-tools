@@ -27,8 +27,6 @@ Card.Sub = function CardSub({ children }: { children: ReactNode }) {
   return <span className="card-sub">{children}</span>;
 };
 
-//
-
 {
   /* <label for="fuel">Fuel level:</label>; */
 }
