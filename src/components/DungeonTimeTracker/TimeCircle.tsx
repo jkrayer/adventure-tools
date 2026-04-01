@@ -1,23 +1,15 @@
-import { CircleButton } from "../CircleButton";
 import LightMenu from "./LightMenu";
 import PopOver from "../Popover";
 import { useDungeonTimeTracker } from "./DungeonTimeTrackerContext";
-
-function TimeCircleTrigger() {
-  const triggerProps = PopOver.useTrigger();
-
-  return <CircleButton className="popover-trigger" {...triggerProps} />;
-}
+import TurnCircle from "./TurnCircle";
 
 export default function TimeCircle({ turnIndex }: { turnIndex: number }) {
   const { currentHour } = useDungeonTimeTracker();
-  const turn = currentHour[turnIndex];
-
-  void turn;
+  void currentHour;
 
   return (
     <PopOver openOn="right" placement="above">
-      <TimeCircleTrigger />
+      <TurnCircle turnIndex={turnIndex} />
       <PopOver.Body>
         <LightMenu />
       </PopOver.Body>

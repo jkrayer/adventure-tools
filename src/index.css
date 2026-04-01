@@ -83,6 +83,39 @@ body {
   fill: var(--white);
 }
 
+/* TurnCircle */
+.turn-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-large);
+  height: var(--size-large);
+  border-radius: 50%;
+  background: var(--white);
+  box-shadow: var(--baseShadow);
+  cursor: pointer;
+}
+
+.turn-circle-checkbox {
+  margin: 0;
+  appearance: none;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--gray04);
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease-out,
+    border-color 0.2s ease-out;
+  pointer-events: none;
+
+  .turn-circle.checked & {
+    background-color: var(--info);
+    border-color: var(--info);
+  }
+}
+
 /* Card */
 .card {
   width: 200px;

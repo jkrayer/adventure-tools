@@ -27,6 +27,7 @@ type DungeonTimeTrackerContextValue = {
   addHour: () => void;
   goToPreviousHour: () => void;
   goToNextHour: () => void;
+  toggleTurnChecked: (turnIndex: number) => void;
 };
 
 const DungeonTimeTrackerContext = createContext<
@@ -63,6 +64,18 @@ export function DungeonTimeTrackerProvider({
     setCurrentHourIndex((prev) => (prev < hours.length - 1 ? prev + 1 : prev));
   };
 
+  const toggleTurnChecked = (turnIndex: number) => {
+    setHours((prev) => {
+      const updatedHour = prev[currentHourIndex].map((turn, i) =>
+        i === turnIndex ? { ...turn, checked: !turn.checked } : turn,
+      ) as DungeonHour;
+
+      return prev.map((hour, i) =>
+        i === currentHourIndex ? updatedHour : hour,
+      );
+    });
+  };
+
   return (
     <DungeonTimeTrackerContext.Provider
       value={{
@@ -72,6 +85,7 @@ export function DungeonTimeTrackerProvider({
         addHour,
         goToPreviousHour,
         goToNextHour,
+        toggleTurnChecked,
       }}
     >
       {children}
