@@ -1,19 +1,22 @@
 import { useMemo } from "react";
 import Menu from "../Menu";
+import { useCharacters } from "../../context/CharactersContext";
 
 export default function LightMenu() {
+  const { characters } = useCharacters();
+
   // characters
   const characterMenu = useMemo(() => {
     return (
       <>
-        {startCharacters.map((character) => (
+        {characters.map((character) => (
           <Menu.Item key={character.id} onClick={() => {}}>
             {character.character}
           </Menu.Item>
         ))}
       </>
     );
-  }, []);
+  }, [characters]);
 
   return (
     <Menu>
@@ -27,48 +30,3 @@ export default function LightMenu() {
     </Menu>
   );
 }
-
-const startCharacters: Character[] = [
-  {
-    id: 1,
-    character: "Dell Graybeard",
-    player: "Jeff",
-    currentHP: 90,
-    maxHP: 100,
-  },
-  {
-    id: 2,
-    character: "Una Undervoot",
-    player: "Lianne",
-    currentHP: 75,
-    maxHP: 100,
-  },
-  {
-    id: 3,
-    character: "B.F. Bagman",
-    player: "Steve",
-    currentHP: 80,
-    maxHP: 100,
-  },
-  {
-    id: 4,
-    character: "Ryan Wythyneye",
-    player: "Bryam",
-    currentHP: 85,
-    maxHP: 100,
-  },
-  {
-    id: 5,
-    character: "Gordon Heavyfoot",
-    player: "Roehl",
-    currentHP: 95,
-    maxHP: 100,
-  },
-  {
-    id: 6,
-    character: "Tiny Tim",
-    player: "John",
-    currentHP: 70,
-    maxHP: 100,
-  },
-];

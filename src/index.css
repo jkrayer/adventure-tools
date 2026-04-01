@@ -45,6 +45,7 @@ body {
   font-family: var(--family);
   font-weight: var(--weight);
   background-color: var(--gray01);
+  text-rendering: optimizeLegibility;
 }
 
 /* button */
@@ -119,14 +120,6 @@ body {
       background-color: var(--error);
     }
   }
-}
-
-.player-tray {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-small);
-  padding: var(--size-medium);
-  overflow-x: auto;
 }
 
 .flex {
@@ -240,6 +233,7 @@ body {
   border-radius: var(--size-micro);
   margin: 1px 0;
   font-family: var(--family);
+  font-weight: var(--weight);
   text-align: left;
   background-color: transparent;
   list-style: none;
@@ -324,15 +318,19 @@ body {
 
 .tray {
   position: fixed;
+  display: flex;
+  gap: var(--size-small);
   padding: var(--size-medium);
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .tray-actions {
-  display: flex;
   justify-content: center;
-  gap: var(--size-small);
   inset: auto var(--size-medium) var(--size-medium);
+}
+
+.tray-characters {
+  flex-direction: column;
 }
 
 /* :root {

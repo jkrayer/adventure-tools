@@ -12,3 +12,7 @@ type TrayProps = PropsWithChildren<{ devMode?: boolean }>;
 export default function ActionTray({ children }: TrayProps) {
   return <div className="tray tray-actions">{children}</div>;
 }
+
+export function CharacterTray({ children }: TrayProps) {
+  return <div className="tray tray-characters">{children}</div>;
+}

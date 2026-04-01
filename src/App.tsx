@@ -1,16 +1,18 @@
 import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
-import ActionTray from "./components/ActionTray";
+import ActionTray, { CharacterTray } from "./components/ActionTray";
 import Players from "./components/Players";
-import "./App.css";
+import { CharactersProvider } from "./context/CharactersContext";
 
 function App() {
   return (
-    <div className="App">
-      <Players />
+    <CharactersProvider>
+      <CharacterTray>
+        <Players />
+      </CharacterTray>
       <ActionTray>
         <DungeonTimeTracker />
       </ActionTray>
-    </div>
+    </CharactersProvider>
   );
 }
 
