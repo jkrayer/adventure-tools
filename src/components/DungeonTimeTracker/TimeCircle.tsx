@@ -13,17 +13,19 @@ type DungeonTurn = {
   lights: Light[];
 };
 
+function TimeCircleTrigger() {
+  const triggerProps = PopOver.useTrigger();
+
+  return <CircleButton className="popover-trigger" {...triggerProps} />;
+}
+
 export default function TimeCircle({ checked, lights }: DungeonTurn) {
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    console.log("Right-clicked on TimeCircle"); // add light menu
-  };
+  void checked;
+  void lights;
 
   return (
-    <PopOver>
-      <PopOver.Trigger>
-        <CircleButton onContextMenu={handleClick} />{" "}
-      </PopOver.Trigger>
+    <PopOver openOn="right" placement="above">
+      <TimeCircleTrigger />
       <PopOver.Body>
         <LightMenu />
       </PopOver.Body>

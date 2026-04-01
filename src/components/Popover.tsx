@@ -2,11 +2,38 @@ import {
   createContext,
   useEffect,
   useContext,
+  useId,
   useState,
+  type MouseEventHandler,
   type ReactNode,
 } from "react";
 
 const not = (x: boolean): boolean => !x;
+const OPEN_POPOVER_EVENT = "popover:open";
+type PopoverPlacement = "above" | "below";
+type PopoverOpenOn = "left" | "right";
+
+type PopoverContextValue = {
+  isOpen: boolean;
+  placement: PopoverPlacement;
+  openOn: PopoverOpenOn;
+  toggle: () => void;
+};
+
+type PopoverTriggerProps = {
+  onClick?: MouseEventHandler<HTMLElement>;
+  onContextMenu?: MouseEventHandler<HTMLElement>;
+};
+
+type PopOverComponent = ((props: {
+  children: ReactNode;
+  placement?: PopoverPlacement;
+  openOn?: PopoverOpenOn;
+}) => ReactNode) & {
+  Trigger: ({ children }: { children: ReactNode }) => ReactNode;
+  Body: ({ children }: { children: ReactNode }) => ReactNode;
+  useTrigger: () => PopoverTriggerProps;
+};
 
 /**
  * Popover Context
@@ -15,6 +42,8 @@ const not = (x: boolean): boolean => !x;
  */
 const PopoverContext = createContext({
   isOpen: false,
+  placement: "above" as PopoverPlacement,
+  openOn: "left" as PopoverOpenOn,
   toggle: () => {},
 });
 
@@ -24,7 +53,16 @@ const PopoverContext = createContext({
  * and footer, and use them inside the Popover component. This will allow us to
  * create a more flexible and reusable popover component.
  */
-function PopOver({ children }: { children: ReactNode }) {
+const PopOver: PopOverComponent = function PopOver({
+  children,
+  placement = "above",
+  openOn = "left",
+}: {
+  children: ReactNode;
+  placement?: PopoverPlacement;
+  openOn?: PopoverOpenOn;
+}) {
+  const popoverId = useId();
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -42,22 +80,76 @@ function PopOver({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  useEffect(() => {
+    const handlePopoverOpen = (event: Event) => {
+      const customEvent = event as CustomEvent<{ id: string }>;
+
+      if (customEvent.detail.id !== popoverId) {
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener(OPEN_POPOVER_EVENT, handlePopoverOpen);
+
+    return () => {
+      window.removeEventListener(OPEN_POPOVER_EVENT, handlePopoverOpen);
+    };
+  }, [popoverId]);
+
+  const toggle = () => {
+    setIsOpen((prevIsOpen) => {
+      const nextIsOpen = not(prevIsOpen);
+
+      if (nextIsOpen) {
+        window.dispatchEvent(
+          new CustomEvent(OPEN_POPOVER_EVENT, { detail: { id: popoverId } }),
+        );
+      }
+
+      return nextIsOpen;
+    });
+  };
+
   return (
-    <PopoverContext.Provider value={{ isOpen, toggle: () => setIsOpen(not) }}>
+    <PopoverContext.Provider
+      value={{
+        isOpen,
+        placement,
+        openOn,
+        toggle,
+      }}
+    >
       <div className="popover">{children}</div>
     </PopoverContext.Provider>
   );
+};
+
+function usePopoverTrigger(): PopoverTriggerProps {
+  const { openOn, toggle } = useContext<PopoverContextValue>(PopoverContext);
+
+  if (openOn === "right") {
+    return {
+      onContextMenu: (event) => {
+        event.preventDefault();
+        toggle();
+      },
+    };
+  }
+
+  return { onClick: () => toggle() };
 }
+
+PopOver.useTrigger = usePopoverTrigger;
 
 PopOver.Trigger = function PopOverTrigger({
   children,
 }: {
   children: ReactNode;
 }) {
-  const { toggle } = useContext(PopoverContext);
+  const triggerProps = usePopoverTrigger();
 
   return (
-    <button className="popover-trigger" onClick={toggle}>
+    <button className="popover-trigger" {...triggerProps}>
       {children}
     </button>
   );
@@ -68,10 +160,12 @@ PopOver.Trigger = function PopOverTrigger({
 // };
 
 PopOver.Body = function PopOverBody({ children }: { children: ReactNode }) {
-  const { isOpen } = useContext(PopoverContext);
+  const { isOpen, placement } = useContext<PopoverContextValue>(PopoverContext);
 
   return (
-    <div className={`popover-body ${isOpen ? "open" : ""}`}>{children}</div>
+    <div className={`popover-body ${placement} ${isOpen ? "open" : ""}`}>
+      {children}
+    </div>
   );
 };
 

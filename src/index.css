@@ -133,10 +133,10 @@ body {
   display: flex;
 }
 
-/* .popover {
+.popover {
   position: relative;
   overflow: visible;
-} */
+}
 
 .popover-trigger {
   display: block;
@@ -148,41 +148,69 @@ body {
 }
 
 .popover-body {
-  position: fixed;
+  position: absolute;
+  left: 50%;
+  z-index: 20;
   display: flex;
   align-items: center;
-  width: 6rem;
+  min-width: 6rem;
   padding: 0;
   border-radius: var(--size-smaller);
   background-color: var(--white);
   box-shadow: var(--overShadow);
   opacity: 0;
   pointer-events: none;
-  transform: translate3d(50%, -120%, 0) scale(0.82, 0.15);
-  transform-origin: bottom center;
   transition:
     padding 180ms ease,
     transform 220ms cubic-bezier(0.2, 1.25, 0.35, 1),
     opacity 140ms ease;
 
+  &.above {
+    bottom: calc(100% + var(--size-smaller));
+    transform: translate3d(-50%, 0.35rem, 0) scale(0.92, 0.55);
+    transform-origin: bottom center;
+  }
+
+  &.below {
+    top: calc(100% + var(--size-smaller));
+    transform: translate3d(-50%, -0.35rem, 0) scale(0.92, 0.55);
+    transform-origin: top center;
+  }
+
   &.open {
     padding: var(--size-small);
     opacity: 1;
     pointer-events: auto;
-    transform: translate3d(50%, -120%, 0) scale(1, 1);
+    transform: translate3d(-50%, 0, 0) scale(1, 1);
   }
+
+  /* &.above.open {
+    transform: translate3d(-50%, 0, 0) scale(1, 1);
+  }
+
+  &.below.open {
+    transform: translate3d(-50%, 0, 0) scale(1, 1);
+  } */
 
   &::after {
     content: "";
     position: absolute;
-    top: 100%;
     left: 50%;
     transform: translateX(-50%);
     border-width: 0.375rem;
     border-style: solid;
-    border-color: var(--white) transparent transparent transparent;
     opacity: 0;
     transition: opacity 140ms ease;
+  }
+
+  &.above::after {
+    top: 100%;
+    border-color: var(--white) transparent transparent transparent;
+  }
+
+  &.below::after {
+    bottom: 100%;
+    border-color: transparent transparent var(--white) transparent;
   }
 
   &.open::after {
