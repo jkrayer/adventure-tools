@@ -136,6 +136,7 @@ body {
 .popover {
   position: relative;
   overflow: visible;
+  line-height: 0;
 }
 
 .popover-trigger {
@@ -178,7 +179,7 @@ body {
   }
 
   &.open {
-    padding: var(--size-small);
+    /* padding: var(--size-small); */
     opacity: 1;
     pointer-events: auto;
     transform: translate3d(-50%, 0, 0) scale(1, 1);
@@ -224,8 +225,9 @@ body {
 }
 
 .menu {
+  /* min-width: max-content; */
   margin: 0;
-  padding: 0;
+  padding: var(--size-micro);
   background-color: var(--white);
   list-style: none;
 }
@@ -243,8 +245,10 @@ body {
   list-style: none;
   cursor: pointer;
   transition: background-color 0.2s ease-out;
+  white-space: nowrap;
 
-  &:hover {
+  &:hover,
+  &[aria-expanded="true"] {
     background-color: var(--infoLight);
   }
 
@@ -260,6 +264,7 @@ body {
 }
 
 .menu-submenu {
+  position: relative;
   list-style: none;
 }
 
@@ -267,6 +272,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  & > span:first-of-type {
+    padding-right: var(--size-medium);
+  }
 }
 
 .menu-submenu-caret {
@@ -275,22 +284,42 @@ body {
 }
 
 .menu-submenu-caret.open {
-  transform: rotate(90deg);
+  transform: translateX(2px);
 }
 
 .menu-nested {
-  max-height: 0;
-  overflow: hidden;
-  margin-left: var(--size-medium);
+  position: absolute;
+  top: var(--submenu-top, 0px);
+  min-width: max-content;
+  max-height: calc(100vh - 1rem);
+  border-radius: var(--size-micro);
+  box-shadow: var(--overShadow);
+  margin-left: 0;
   opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-0.3rem, 0, 0) scale(0.98);
+  z-index: 30;
   transition:
-    max-height 0.25s ease-out,
+    transform 0.2s ease-out,
     opacity 0.2s ease-out;
 }
 
+.menu-nested.open-right {
+  left: calc(100% + var(--size-micro));
+  right: auto;
+  transform: translate3d(-0.3rem, 0, 0) scale(0.98);
+}
+
+.menu-nested.open-left {
+  right: calc(100% + var(--size-micro));
+  left: auto;
+  transform: translate3d(0.3rem, 0, 0) scale(0.98);
+}
+
 .menu-nested.open {
-  max-height: 20rem;
   opacity: 1;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0) scale(1);
 }
 
 .tray {

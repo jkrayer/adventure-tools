@@ -6,9 +6,11 @@ export default function LightMenu() {
   const characterMenu = useMemo(() => {
     return (
       <>
-        <Menu.Item onClick={() => {}}>Light Spell</Menu.Item>
-        <Menu.Item onClick={() => {}}>Lantern</Menu.Item>
-        <Menu.Item onClick={() => {}}>Torch</Menu.Item>
+        {startCharacters.map((character) => (
+          <Menu.Item key={character.id} onClick={() => {}}>
+            {character.character}
+          </Menu.Item>
+        ))}
       </>
     );
   }, []);
@@ -25,3 +27,48 @@ export default function LightMenu() {
     </Menu>
   );
 }
+
+const startCharacters: Character[] = [
+  {
+    id: 1,
+    character: "Dell Graybeard",
+    player: "Jeff",
+    currentHP: 90,
+    maxHP: 100,
+  },
+  {
+    id: 2,
+    character: "Una Undervoot",
+    player: "Lianne",
+    currentHP: 75,
+    maxHP: 100,
+  },
+  {
+    id: 3,
+    character: "B.F. Bagman",
+    player: "Steve",
+    currentHP: 80,
+    maxHP: 100,
+  },
+  {
+    id: 4,
+    character: "Ryan Wythyneye",
+    player: "Bryam",
+    currentHP: 85,
+    maxHP: 100,
+  },
+  {
+    id: 5,
+    character: "Gordon Heavyfoot",
+    player: "Roehl",
+    currentHP: 95,
+    maxHP: 100,
+  },
+  {
+    id: 6,
+    character: "Tiny Tim",
+    player: "John",
+    currentHP: 70,
+    maxHP: 100,
+  },
+];
