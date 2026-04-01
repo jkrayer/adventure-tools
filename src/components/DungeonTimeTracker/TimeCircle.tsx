@@ -1,17 +1,7 @@
 import { CircleButton } from "../CircleButton";
 import LightMenu from "./LightMenu";
 import PopOver from "../Popover";
-
-type Light = {
-  duration: number;
-  owner: string;
-  type: "torch" | "lamp" | "light spell";
-};
-
-type DungeonTurn = {
-  checked: boolean;
-  lights: Light[];
-};
+import { useDungeonTimeTracker } from "./DungeonTimeTrackerContext";
 
 function TimeCircleTrigger() {
   const triggerProps = PopOver.useTrigger();
@@ -19,9 +9,11 @@ function TimeCircleTrigger() {
   return <CircleButton className="popover-trigger" {...triggerProps} />;
 }
 
-export default function TimeCircle({ checked, lights }: DungeonTurn) {
-  void checked;
-  void lights;
+export default function TimeCircle({ turnIndex }: { turnIndex: number }) {
+  const { currentHour } = useDungeonTimeTracker();
+  const turn = currentHour[turnIndex];
+
+  void turn;
 
   return (
     <PopOver openOn="right" placement="above">
