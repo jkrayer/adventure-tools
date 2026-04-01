@@ -1,32 +1,54 @@
-import { useMemo } from "react";
 import Menu from "../Menu";
+import PopOver from "../Popover";
 import { useCharacters } from "../../context/CharactersContext";
+import { useDungeonTimeTracker, type Light } from "./DungeonTimeTrackerContext";
 
-export default function LightMenu() {
+const lightSources: Array<{
+  label: string;
+  light: Pick<Light, "duration" | "type">;
+}> = [
+  { label: "Light Spell", light: { duration: 6, type: "light spell" } },
+  { label: "Lantern", light: { duration: 24, type: "lamp" } },
+  { label: "Torch", light: { duration: 6, type: "torch" } },
+];
+
+export default function LightMenu({ turnIndex }: { turnIndex: number }) {
   const { characters } = useCharacters();
-
-  // characters
-  const characterMenu = useMemo(() => {
-    return (
-      <>
-        {characters.map((character) => (
-          <Menu.Item key={character.id} onClick={() => {}}>
-            {character.character}
-          </Menu.Item>
-        ))}
-      </>
-    );
-  }, [characters]);
+  const { addLight, removeLight, currentHour } = useDungeonTimeTracker();
+  const { close } = PopOver.useControls();
+  const turnLights = currentHour[turnIndex].lights;
 
   return (
-    <Menu>
+    <Menu onAction={close}>
       <Menu.Submenu label="Add Light">
-        <Menu.Submenu label="LightSpell">{characterMenu}</Menu.Submenu>
-        <Menu.Submenu label="Lantern">{characterMenu}</Menu.Submenu>
-        <Menu.Submenu label="Torch">{characterMenu}</Menu.Submenu>
+        {lightSources.map(({ label, light }) => (
+          <Menu.Submenu key={label} label={label}>
+            {characters.map((character) => (
+              <Menu.Item
+                key={character.id}
+                onClick={() =>
+                  addLight(turnIndex, {
+                    ...light,
+                    owner: character.character,
+                  })
+                }
+              >
+                {character.character}
+              </Menu.Item>
+            ))}
+          </Menu.Submenu>
+        ))}
       </Menu.Submenu>
-      {/* if no lights then disable */}
-      <Menu.Item onClick={() => {}}>Cancel Light</Menu.Item>
+      <Menu.Submenu label="Cancel Light" isDisabled={turnLights.length === 0}>
+        {turnLights.map((light, lightIndex) => (
+          <Menu.Item
+            key={`${light.owner}-${light.type}-${lightIndex}`}
+            onClick={() => removeLight(turnIndex, lightIndex)}
+          >
+            {`${light.owner} - ${light.type}`}
+          </Menu.Item>
+        ))}
+      </Menu.Submenu>
     </Menu>
   );
 }

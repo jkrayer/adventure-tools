@@ -16,13 +16,17 @@ type MenuItemProps = PropsWithChildren<{
   isDisabled?: boolean;
 }>;
 
+type MenuProps = PropsWithChildren<{
+  onAction?: () => void;
+}>;
+
 type MenuSubmenuProps = PropsWithChildren<{
   label: string;
   defaultOpen?: boolean;
   isDisabled?: boolean;
 }>;
 
-type MenuComponent = ((props: PropsWithChildren<unknown>) => ReactElement) & {
+type MenuComponent = ((props: MenuProps) => ReactElement) & {
   Item: (props: MenuItemProps) => ReactElement;
   Submenu: (props: MenuSubmenuProps) => ReactElement;
 };
@@ -37,9 +41,18 @@ const MenuLevelContext = createContext<MenuLevelContextValue>({
   setOpenSubmenuId: () => {},
 });
 
-const Menu = (({ children }: PropsWithChildren<unknown>) => {
+const MenuActionContext = createContext({
+  closeAllMenus: () => {},
+});
+
+const Menu = (({ children, onAction }: MenuProps) => {
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
   const menuRef = useRef<HTMLElement | null>(null);
+
+  const closeAllMenus = () => {
+    setOpenSubmenuId(null);
+    onAction?.();
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -56,11 +69,13 @@ const Menu = (({ children }: PropsWithChildren<unknown>) => {
   }, []);
 
   return (
-    <MenuLevelContext.Provider value={{ openSubmenuId, setOpenSubmenuId }}>
-      <menu className="menu" ref={menuRef}>
-        {children}
-      </menu>
-    </MenuLevelContext.Provider>
+    <MenuActionContext.Provider value={{ closeAllMenus }}>
+      <MenuLevelContext.Provider value={{ openSubmenuId, setOpenSubmenuId }}>
+        <menu className="menu" ref={menuRef}>
+          {children}
+        </menu>
+      </MenuLevelContext.Provider>
+    </MenuActionContext.Provider>
   );
 }) as MenuComponent;
 
@@ -69,12 +84,20 @@ Menu.Item = function MenuItem({
   onClick,
   isDisabled = false,
 }: MenuItemProps) {
+  const { closeAllMenus } = useContext(MenuActionContext);
+
   return (
     <li>
       <button
         className="menu-item"
         disabled={isDisabled}
-        onClick={onClick}
+        onClick={(event) => {
+          onClick(event);
+
+          if (!event.defaultPrevented) {
+            closeAllMenus();
+          }
+        }}
         type="button"
       >
         {children}

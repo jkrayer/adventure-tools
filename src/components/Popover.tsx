@@ -17,6 +17,7 @@ type PopoverContextValue = {
   isOpen: boolean;
   placement: PopoverPlacement;
   openOn: PopoverOpenOn;
+  close: () => void;
   toggle: () => void;
 };
 
@@ -32,6 +33,7 @@ type PopOverComponent = ((props: {
 }) => ReactNode) & {
   Trigger: ({ children }: { children: ReactNode }) => ReactNode;
   Body: ({ children }: { children: ReactNode }) => ReactNode;
+  useControls: () => Pick<PopoverContextValue, "close" | "isOpen" | "toggle">;
   useTrigger: () => PopoverTriggerProps;
 };
 
@@ -44,6 +46,7 @@ const PopoverContext = createContext({
   isOpen: false,
   placement: "above" as PopoverPlacement,
   openOn: "left" as PopoverOpenOn,
+  close: () => {},
   toggle: () => {},
 });
 
@@ -110,12 +113,17 @@ const PopOver: PopOverComponent = function PopOver({
     });
   };
 
+  const close = () => {
+    setIsOpen(false);
+  };
+
   return (
     <PopoverContext.Provider
       value={{
         isOpen,
         placement,
         openOn,
+        close,
         toggle,
       }}
     >
@@ -140,6 +148,12 @@ function usePopoverTrigger(): PopoverTriggerProps {
 }
 
 PopOver.useTrigger = usePopoverTrigger;
+PopOver.useControls = function usePopoverControls() {
+  const { close, isOpen, toggle } =
+    useContext<PopoverContextValue>(PopoverContext);
+
+  return { close, isOpen, toggle };
+};
 
 PopOver.Trigger = function PopOverTrigger({
   children,
