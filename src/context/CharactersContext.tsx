@@ -9,10 +9,12 @@ import { useSyncState } from "../lib";
 
 export type Character = {
   id: number;
+  ac: number;
   character: string;
-  player: string;
   currentHP: number;
+  link: string;
   maxHP: number;
+  player: string;
 };
 
 type CharactersContextValue = {
@@ -48,6 +50,7 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useCharacters() {
   const context = useContext(CharactersContext);
 
@@ -63,8 +66,10 @@ const startCharacters: Character[] = [
     id: 1,
     character: "Dell Graybeard",
     player: "Jeff",
-    currentHP: 90,
+    currentHP: 83,
     maxHP: 100,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-assassin",
+    ac: 7,
   },
   {
     id: 2,
@@ -72,6 +77,8 @@ const startCharacters: Character[] = [
     player: "Lianne",
     currentHP: 75,
     maxHP: 100,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
+    ac: 5,
   },
   {
     id: 3,
@@ -79,13 +86,17 @@ const startCharacters: Character[] = [
     player: "Steve",
     currentHP: 80,
     maxHP: 100,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
+    ac: 7,
   },
   {
     id: 4,
     character: "Ryan Wythyneye",
     player: "Bryam",
-    currentHP: 85,
+    currentHP: 50,
     maxHP: 100,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
+    ac: 7,
   },
   {
     id: 5,
@@ -93,12 +104,16 @@ const startCharacters: Character[] = [
     player: "Roehl",
     currentHP: 95,
     maxHP: 100,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
+    ac: 7,
   },
   {
     id: 6,
     character: "Tiny Tim",
     player: "John",
-    currentHP: 70,
+    currentHP: 117,
     maxHP: 100,
+    ac: 7,
+    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
   },
 ];

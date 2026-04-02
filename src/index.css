@@ -170,6 +170,11 @@ body {
 
 .flex {
   display: flex;
+
+  &.col {
+    flex-direction: column;
+    gap: var(--size-small);
+  }
 }
 
 .popover {

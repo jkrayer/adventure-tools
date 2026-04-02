@@ -1,7 +1,7 @@
 /**
- * Card component
- * A simple card component that can be used to display content in a card format.
- * It accepts children as props and renders them inside the card.
+ * Flex component
+ * A flexible layout component for creating flexbox containers.
+ * Supports justifyContent alignment and can be extended with sub-components.
  */
 
 import type { ReactNode } from "react";
@@ -16,43 +16,20 @@ type FlexProps = {
     | "space-around";
 };
 
-function Flex({ children, justifyContent = "flex-start" }: FlexProps) {
+type FlexComponent = ((props: FlexProps) => ReactNode) & {
+  Col: (props: { children: ReactNode }) => ReactNode;
+};
+
+const Flex = (({ children, justifyContent = "flex-start" }: FlexProps) => {
   return (
     <div className="flex" style={{ justifyContent }}>
       {children}
     </div>
   );
-}
+}) as FlexComponent;
 
-// Card.Meter = function CardMeter({
-//   max = 100,
-//   value = 90,
-// }: {
-//   max?: number;
-//   value?: number;
-// }) {
-//   const percentage = (value / max) * 100;
-
-//   const barStyle =
-//     percentage > 66 ? "green" : percentage > 33 ? "yellow" : "red";
-
-//   return (
-//     <div
-//       aria-label="Hit Points"
-//       aria-valuetext={`${value} of ${max} HP`}
-//       aria-valuemin={0}
-//       aria-valuemax={max}
-//       aria-valuenow={value}
-//       className="card-meter"
-//       role="meter"
-//     >
-//       <div
-//         className={`card-meter-fill ${barStyle}`}
-//         role="presentation"
-//         style={{ width: `${percentage}%` }}
-//       />
-//     </div>
-//   );
-// };
+Flex.Col = function FlexCol({ children }: { children: ReactNode }) {
+  return <div className="flex col">{children}</div>;
+};
 
 export default Flex;

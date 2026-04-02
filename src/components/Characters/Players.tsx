@@ -1,5 +1,5 @@
 import PlayerCard from "./PlayerCard";
-import { useCharacters } from "../context/CharactersContext";
+import { useCharacters } from "../../context/CharactersContext";
 
 export default function Players() {
   const { characters, updateCharacterHP } = useCharacters();
@@ -9,11 +9,13 @@ export default function Players() {
       {characters.map((player) => (
         <PlayerCard
           key={player.id}
+          ac={player.ac}
           character={player.character}
-          player={player.player}
           currentHP={player.currentHP}
+          link={player.link}
           maxHP={player.maxHP}
           onHPChange={(newHP) => updateCharacterHP(player.id, newHP)}
+          player={player.player}
         />
       ))}
     </>
