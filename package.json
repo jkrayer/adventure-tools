@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@project_goldenrod/shared": "file:../shared",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
