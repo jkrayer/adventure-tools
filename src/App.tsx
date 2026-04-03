@@ -1,15 +1,13 @@
-import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
 import ActionTray, { CharacterTray } from "./components/ActionTray";
-import Players from "./components/Characters/Players.tsx";
+import Characters from "./components/Characters/Characters.tsx";
+import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
 import { CharactersProvider } from "./context/CharactersContext";
-import CharacterForm from "./components/Characters/CharacterForm.tsx";
 
 function App() {
   return (
     <CharactersProvider>
       <CharacterTray>
-        <Players />
-        <CharacterForm />
+        <Characters />
       </CharacterTray>
       <ActionTray>
         <DungeonTimeTracker />

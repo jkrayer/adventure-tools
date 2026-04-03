@@ -1,13 +1,13 @@
-import PlayerCard from "./PlayerCard";
+import CharacterCard from "./CharacterCard";
 import { useCharacters } from "../../context/CharactersContext";
 
-export default function Players() {
+export default function Characters() {
   const { characters, updateCharacterHP } = useCharacters();
 
   return (
     <>
       {characters.map((player) => (
-        <PlayerCard
+        <CharacterCard
           key={player.id}
           ac={player.ac}
           character={player.character}
