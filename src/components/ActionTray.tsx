@@ -21,3 +21,11 @@ export function CharacterTray({ children }: TrayProps) {
     </div>
   );
 }
+
+export function ToolTray({ children }: TrayProps) {
+  return (
+    <div className="tray tray-tools">
+      <Flex.Col>{children}</Flex.Col>
+    </div>
+  );
+}

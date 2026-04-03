@@ -127,9 +127,18 @@ body {
   transition: fill 0.2s ease-out;
 }
 
+.btn-github-icon {
+  color: var(--gray50);
+  transition: color 0.2s ease-out;
+}
+
 .btn-circle:hover .btn-plus-icon rect,
 .btn-circle:hover .btn-plus-icon polygon {
   fill: var(--white);
+}
+
+.btn-circle:hover .btn-github-icon {
+  color: var(--white);
 }
 
 /* TurnCircle */
@@ -487,11 +496,15 @@ body {
 }
 
 .tray-actions {
-  inset: auto var(--size-medium) var(--size-medium);
+  inset: auto 64px 0;
 }
 
 .tray-characters {
   flex-direction: column;
+}
+
+.tray-tools {
+  inset: 0 0 0 auto;
 }
 
 /* 10. Form Controls  */
