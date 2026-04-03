@@ -1,52 +1,10 @@
-import Card from "../Card";
-import Flex from "../Flex";
-import Menu from "../Menu";
-import PopOver from "../Popover";
+import CharacterOptionsMenu from "./CharacterOptionsMenu";
+import CharacterOptionsTrigger from "./CharacterOptionsTrigger";
+import Card from "../../Card";
+import Flex from "../../Flex";
+import PopOver from "../../Popover";
 
-function CharacterOptionsMenu({
-  link,
-  onDelete,
-  onEdit,
-}: {
-  link: string;
-  onDelete: () => void;
-  onEdit: () => void;
-}) {
-  const { close } = PopOver.useControls();
-
-  return (
-    <Menu onAction={close}>
-      <Menu.Item as="a" href={link} rel="noopener noreferrer" target="_blank">
-        Open Rules
-      </Menu.Item>
-      <Menu.Item onClick={onEdit}>Edit Character</Menu.Item>
-      <Menu.Item intent="danger" onAction={onDelete}>
-        Remove Character
-      </Menu.Item>
-    </Menu>
-  );
-}
-
-function CharacterOptionsTrigger() {
-  const triggerProps = PopOver.useTrigger();
-  const { isOpen } = PopOver.useControls();
-
-  return (
-    <button
-      aria-expanded={isOpen}
-      aria-label="Character options"
-      className={`btn btn-overlay ${isOpen ? "open" : ""}`}
-      type="button"
-      {...triggerProps}
-    >
-      <span className="btn-overly-menu-line top" />
-      <span className="btn-overly-menu-line middle" />
-      <span className="btn-overly-menu-line bottom" />
-    </button>
-  );
-}
-
-export default function PlayerCard({
+export default function CharacterCard({
   character,
   link,
   currentHP,

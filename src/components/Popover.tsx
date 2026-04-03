@@ -7,10 +7,10 @@ import {
   type MouseEventHandler,
   type ReactNode,
 } from "react";
+import { not, OPEN_POPOVER_EVENT } from "../lib/";
 
-const not = (x: boolean): boolean => !x;
-const OPEN_POPOVER_EVENT = "popover:open";
 type PopoverPlacement = "above" | "below";
+
 type PopoverOpenOn = "left" | "right";
 
 type PopoverContextValue = {

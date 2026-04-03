@@ -99,15 +99,21 @@ body {
   &:hover {
     background-color: #808080;
   }
+}
 
-  & > svg {
-    fill: var(--gray50);
-    transition: fill 0.2s ease-out;
-  }
+.btn-circle .icon {
+  color: var(--gray50);
+}
 
-  &:hover > svg {
-    fill: var(--white);
-  }
+.btn-circle .icon path,
+.btn-circle .icon polygon,
+.btn-circle .icon rect {
+  fill: currentColor;
+  transition: fill 0.2s ease-out;
+}
+
+.btn-circle:hover .icon {
+  color: var(--white);
 }
 
 .btn-standard {

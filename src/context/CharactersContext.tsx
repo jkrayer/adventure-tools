@@ -5,9 +5,7 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
-import { useSyncState } from "../lib";
-
-export const CHARACTERS_STORAGE_KEY = "goldenrod:characters";
+import { useSyncState, CHARACTERS_STORAGE_KEY } from "../lib";
 
 export type Character = {
   id: number;

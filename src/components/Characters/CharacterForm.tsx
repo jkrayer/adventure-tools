@@ -1,4 +1,4 @@
-import type { FormEvent } from "react";
+import type { SubmitEvent } from "react";
 import Form from "../Form.tsx";
 import Input from "../Input.tsx";
 import Label from "../Label.tsx";
@@ -16,7 +16,7 @@ export default function CharacterForm({
 }: CharacterFormProps) {
   const { createNew, updateCharacter } = useCharacters();
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
 
     const player = String(formData.get("player-name") ?? "").trim();

@@ -1,4 +1,4 @@
-import ActionTray, { CharacterTray, ToolTray } from "./components/ActionTray";
+import * as Tray from "./components/ActionTray";
 import Characters from "./components/Characters/Characters.tsx";
 import LocalhostCharacterSeed from "./components/Characters/LocalhostCharacterSeed";
 import { GithubLink } from "./components/CircleButton";
@@ -10,18 +10,18 @@ function App() {
   return (
     <CharactersProvider>
       <LocalhostCharacterSeed />
-      <CharacterTray>
+      <Tray.Characters>
         <Characters />
-      </CharacterTray>
-      <ToolTray>
+      </Tray.Characters>
+      <Tray.Tools>
         <span style={{ fontSize: "0.625rem", textAlign: "center" }}>
           {packageJson.version}
         </span>
         <GithubLink />
-      </ToolTray>
-      <ActionTray>
+      </Tray.Tools>
+      <Tray.Actions>
         <DungeonTimeTracker />
-      </ActionTray>
+      </Tray.Actions>
     </CharactersProvider>
   );
 }

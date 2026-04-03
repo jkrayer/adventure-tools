@@ -8,13 +8,13 @@ import Flex from "./Flex";
  * May be a compound component or a set of highly similar components...
  */
 
-type TrayProps = PropsWithChildren<{ devMode?: boolean }>;
+type TrayProps = PropsWithChildren<unknown>;
 
-export default function ActionTray({ children }: TrayProps) {
+export function Actions({ children }: TrayProps) {
   return <div className="tray tray-actions">{children}</div>;
 }
 
-export function CharacterTray({ children }: TrayProps) {
+export function Characters({ children }: TrayProps) {
   return (
     <div className="tray tray-characters">
       <Flex.Col>{children}</Flex.Col>
@@ -22,7 +22,7 @@ export function CharacterTray({ children }: TrayProps) {
   );
 }
 
-export function ToolTray({ children }: TrayProps) {
+export function Tools({ children }: TrayProps) {
   return (
     <div className="tray tray-tools">
       <Flex.Col>{children}</Flex.Col>

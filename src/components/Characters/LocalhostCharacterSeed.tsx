@@ -1,9 +1,6 @@
 import { useEffect } from "react";
-import {
-  CHARACTERS_STORAGE_KEY,
-  useCharacters,
-  type Character,
-} from "../../context/CharactersContext";
+import { useCharacters, type Character } from "../../context/CharactersContext";
+import { CHARACTERS_STORAGE_KEY } from "../../lib";
 
 const localhostCharacters: Character[] = [
   {

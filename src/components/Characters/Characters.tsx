@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CharacterCard from "./CharacterCard";
+import CharacterCard from "./CharacterCard/CharacterCard";
 import CharacterForm from "./CharacterForm";
 import Modal from "../Modal";
 import { AddButton } from "../CircleButton";
