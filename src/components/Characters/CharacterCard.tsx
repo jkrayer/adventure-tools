@@ -35,13 +35,13 @@ function CharacterOptionsTrigger() {
     <button
       aria-expanded={isOpen}
       aria-label="Character options"
-      className={`character-card-menu-btn ${isOpen ? "open" : ""}`}
+      className={`btn btn-overlay ${isOpen ? "open" : ""}`}
       type="button"
       {...triggerProps}
     >
-      <span className="character-card-menu-line top" />
-      <span className="character-card-menu-line middle" />
-      <span className="character-card-menu-line bottom" />
+      <span className="btn-overly-menu-line top" />
+      <span className="btn-overly-menu-line middle" />
+      <span className="btn-overly-menu-line bottom" />
     </button>
   );
 }

@@ -2,7 +2,7 @@
   Table of Contents
   1. CSS Variables (:root)
   2. Global Resets (*, body)
-  3. Buttons (.btn, .btn-circle, .btn-plus-icon)
+  3. Buttons (.btn, .btn-circle, .btn-standard, .btn-overlay)
   4. Turn Circle (.turn-circle*)
   5. Card (.card, .card-meter*)
   6. Flex Layout (.flex*)
@@ -72,6 +72,7 @@ body {
   justify-content: center;
   padding: 0;
   border: none;
+  border-radius: var(--size-micro);
   appearance: none;
   cursor: pointer;
 
@@ -80,31 +81,10 @@ body {
     background-color: var(--gray02);
     cursor: not-allowed;
   }
-}
 
-.btn-primary {
-  padding: var(--size-small) var(--size-medium);
-  border: 1px solid var(--info);
-  border-radius: var(--size-micro);
-  background: var(--info);
-  font-size: 0.75rem;
-  letter-spacing: 0.4px;
-  color: var(--white);
-  text-align: center;
-
-  &:focus,
-  &:hover {
-    background-color: var(--infoDark);
-    border-color: var(--infoDark);
-  }
-
-  &:disabled {
-    border-color: var(--gray04);
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: none;
+  &:focus-visible {
+    outline: var(--size-micro) solid var(--infoDark);
+    outline-offset: 1px;
   }
 }
 
@@ -119,29 +99,70 @@ body {
   &:hover {
     background-color: #808080;
   }
+
+  & > svg {
+    fill: var(--gray50);
+    transition: fill 0.2s ease-out;
+  }
+
+  &:hover > svg {
+    fill: var(--white);
+  }
 }
 
-.btn-plus-icon rect,
-.btn-plus-icon polygon {
-  fill: var(--gray50);
-  transition: fill 0.2s ease-out;
-}
+.btn-standard {
+  padding: var(--size-small) var(--size-medium);
+  border: 1px solid var(--info);
 
-.btn-github-icon {
-  color: var(--gray50);
-  transition: color 0.2s ease-out;
-}
-
-.btn-circle:hover .btn-plus-icon rect,
-.btn-circle:hover .btn-plus-icon polygon {
-  fill: var(--white);
-}
-
-.btn-circle:hover .btn-github-icon {
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
   color: var(--white);
+  text-align: center;
+
+  &.info {
+    background: var(--info);
+
+    &:focus,
+    &:hover {
+      background-color: var(--infoDark);
+      border-color: var(--infoDark);
+    }
+  }
+
+  &:disabled {
+    border-color: var(--gray04);
+  }
 }
 
-/* TurnCircle */
+.btn-overlay {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: var(--white);
+  box-shadow: var(--baseShadow);
+  opacity: 0.5;
+  transition: opacity 180ms ease-out;
+
+  &:hover,
+  &:focus-visible,
+  &.open {
+    opacity: 1;
+  }
+
+  &.open .btn-overly-menu-line.top {
+    transform: translateY(0) rotate(45deg);
+  }
+
+  &.open .btn-overly-menu-line.middle {
+    opacity: 0;
+  }
+
+  &.open .btn-overly-menu-line.bottom {
+    transform: translateY(0) rotate(-45deg);
+  }
+}
+
+/* 4. Turn Circle */
 .turn-circle {
   position: relative;
   display: flex;
@@ -160,7 +181,6 @@ body {
   top: -1.1rem;
   left: 50%;
   transform: translateX(-50%);
-  font-family: "Jost", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 0.875rem;
   line-height: 1;
   color: #000;
@@ -187,7 +207,7 @@ body {
   }
 }
 
-/* Card */
+/* 5. Card */
 .card {
   width: 200px;
   padding: var(--size-small);
@@ -214,34 +234,7 @@ body {
   right: calc(-1 * (24px + var(--size-small)));
 }
 
-.character-card-menu-btn {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border: none;
-  border-radius: 2px;
-  background: var(--white);
-  box-shadow: var(--baseShadow);
-  opacity: 0.5;
-  cursor: pointer;
-  transition: opacity 180ms ease-out;
-}
-
-.character-card-menu-btn:hover,
-.character-card-menu-btn:focus-visible,
-.character-card-menu-btn.open {
-  opacity: 1;
-}
-
-.character-card-menu-btn:focus-visible {
-  outline: 2px solid var(--infoDark);
-  outline-offset: 2px;
-}
-
-.character-card-menu-line {
+.btn-overly-menu-line {
   position: absolute;
   left: 5px;
   width: 14px;
@@ -253,28 +246,16 @@ body {
     opacity 140ms ease-out;
 }
 
-.character-card-menu-line.top {
+.btn-overly-menu-line.top {
   transform: translateY(-4px);
 }
 
-.character-card-menu-line.middle {
+.btn-overly-menu-line.middle {
   transform: translateY(0);
 }
 
-.character-card-menu-line.bottom {
+.btn-overly-menu-line.bottom {
   transform: translateY(4px);
-}
-
-.character-card-menu-btn.open .character-card-menu-line.top {
-  transform: translateY(0) rotate(45deg);
-}
-
-.character-card-menu-btn.open .character-card-menu-line.middle {
-  opacity: 0;
-}
-
-.character-card-menu-btn.open .character-card-menu-line.bottom {
-  transform: translateY(0) rotate(-45deg);
 }
 
 .card-meter {
@@ -318,15 +299,6 @@ body {
   position: relative;
   overflow: visible;
   line-height: 0;
-}
-
-.popover-trigger {
-  display: block;
-  width: 100%;
-  padding-inline: 0;
-  border: none;
-  appearance: none;
-  cursor: pointer;
 }
 
 .popover-body {
@@ -405,6 +377,13 @@ body {
   }
 }
 
+/* See 3. Buttons */
+.popover-trigger {
+  display: block;
+  width: 100%;
+  padding-inline: 0;
+}
+
 .modal {
   width: 400px;
   background: #ffffff;
@@ -463,8 +442,8 @@ body {
   }
 }
 
+/* 8. Menu */
 .menu {
-  /* min-width: max-content; */
   margin: 0;
   padding: var(--size-micro);
   background-color: var(--white);
@@ -704,63 +683,4 @@ body {
     filter: invert(1) brightness(2);
   }
 }
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
-} */
+*/

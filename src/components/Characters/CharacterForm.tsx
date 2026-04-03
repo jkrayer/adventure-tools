@@ -124,7 +124,7 @@ export default function CharacterForm({
             />
           </div>
           <Flex gap="medium" justifyContent="flex-end">
-            <button className="btn btn-primary" type="submit">
+            <button className="btn btn-standard info" type="submit">
               Save
             </button>
           </Flex>

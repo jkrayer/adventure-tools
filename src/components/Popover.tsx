@@ -163,7 +163,7 @@ PopOver.Trigger = function PopOverTrigger({
   const triggerProps = usePopoverTrigger();
 
   return (
-    <button className="popover-trigger" {...triggerProps}>
+    <button className="btn popover-trigger" {...triggerProps}>
       {children}
     </button>
   );
