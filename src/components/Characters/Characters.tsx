@@ -1,8 +1,13 @@
+import { useState } from "react";
 import CharacterCard from "./CharacterCard";
+import CharacterForm from "./CharacterForm";
+import Modal from "../Modal";
+import { AddButton } from "../CircleButton";
 import { useCharacters } from "../../context/CharactersContext";
 
 export default function Characters() {
   const { characters, updateCharacterHP } = useCharacters();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   return (
     <>
@@ -18,6 +23,19 @@ export default function Characters() {
           player={player.player}
         />
       ))}
+
+      <AddButton
+        onClick={() => setIsCreateModalOpen(true)}
+        title="Add character"
+      />
+
+      <Modal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+        title="Add Character"
+      >
+        {({ close }) => <CharacterForm onClose={close} />}
+      </Modal>
     </>
   );
 }

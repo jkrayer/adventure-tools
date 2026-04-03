@@ -1,17 +1,58 @@
+import type { FormEvent } from "react";
 import Form from "../Form.tsx";
 import Input from "../Input.tsx";
 import Label from "../Label.tsx";
 import Flex from "../Flex.tsx";
+import { useCharacters } from "../../context/CharactersContext";
 
-export default function CharacterForm() {
+type CharacterFormProps = {
+  onClose: () => void;
+};
+
+export default function CharacterForm({ onClose }: CharacterFormProps) {
+  const { createNew } = useCharacters();
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+
+    const player = String(formData.get("player-name") ?? "").trim();
+    const character = String(formData.get("character-name") ?? "").trim();
+    const maxHP = Number(formData.get("character-hp-max") ?? 0);
+    const currentHPRaw = formData.get("character-hp-current");
+    const currentHP =
+      currentHPRaw === null || String(currentHPRaw).trim() === ""
+        ? maxHP
+        : Number(currentHPRaw);
+    const ac = Number(formData.get("character-ac") ?? 0);
+    const link = String(formData.get("player-link") ?? "").trim();
+
+    createNew({
+      ac,
+      character,
+      currentHP,
+      link,
+      maxHP,
+      player,
+    });
+
+    event.currentTarget.reset();
+    onClose();
+  };
+
   return (
     <div style={{ maxWidth: "336px", margin: "0 auto" }}>
-      <Form>
+      <Form onSubmit={handleSubmit}>
         <Flex.Col gap="medium">
           <Flex gap="medium">
             <div>
               <Label htmlFor="player-name">Player:</Label>
-              <Input id="player-name" name="player-name" type="text" required />
+              <Input
+                autoFocus
+                id="player-name"
+                name="player-name"
+                required
+                type="text"
+              />
             </div>
             <div>
               <Label htmlFor="character-name">Character:</Label>

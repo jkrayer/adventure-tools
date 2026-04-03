@@ -20,6 +20,7 @@ export type Character = {
 type CharactersContextValue = {
   characters: Character[];
   setCharacters: Dispatch<SetStateAction<Character[]>>;
+  createNew: (character: Omit<Character, "id">) => void;
   updateCharacterHP: (id: number, currentHP: number) => void;
 };
 
@@ -41,9 +42,28 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const createNew = (character: Omit<Character, "id">) => {
+    setCharacters((prev) => {
+      const maxId = prev.reduce(
+        (currentMax, currentCharacter) =>
+          currentCharacter.id > currentMax ? currentCharacter.id : currentMax,
+        0,
+      );
+
+      return [
+        ...prev,
+        {
+          ...character,
+          currentHP: character.currentHP || character.maxHP,
+          id: maxId + 1,
+        },
+      ];
+    });
+  };
+
   return (
     <CharactersContext.Provider
-      value={{ characters, setCharacters, updateCharacterHP }}
+      value={{ characters, setCharacters, createNew, updateCharacterHP }}
     >
       {children}
     </CharactersContext.Provider>
