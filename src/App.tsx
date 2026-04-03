@@ -1,5 +1,6 @@
 import ActionTray, { CharacterTray, ToolTray } from "./components/ActionTray";
 import Characters from "./components/Characters/Characters.tsx";
+import LocalhostCharacterSeed from "./components/Characters/LocalhostCharacterSeed";
 import { GithubLink } from "./components/CircleButton";
 import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
 import { CharactersProvider } from "./context/CharactersContext";
@@ -8,6 +9,7 @@ import packageJson from "../package.json";
 function App() {
   return (
     <CharactersProvider>
+      <LocalhostCharacterSeed />
       <CharacterTray>
         <Characters />
       </CharacterTray>

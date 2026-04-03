@@ -7,6 +7,8 @@ import {
 } from "react";
 import { useSyncState } from "../lib";
 
+export const CHARACTERS_STORAGE_KEY = "goldenrod:characters";
+
 export type Character = {
   id: number;
   ac: number;
@@ -32,8 +34,8 @@ const CharactersContext = createContext<CharactersContextValue | undefined>(
 
 export function CharactersProvider({ children }: { children: ReactNode }) {
   const [characters, setCharacters] = useSyncState<Character[]>(
-    "goldenrod:characters",
-    startCharacters,
+    CHARACTERS_STORAGE_KEY,
+    [],
   );
 
   const updateCharacterHP = (id: number, currentHP: number) => {
@@ -107,60 +109,3 @@ export function useCharacters() {
 
   return context;
 }
-
-const startCharacters: Character[] = [
-  {
-    id: 1,
-    character: "Dell Graybeard",
-    player: "Jeff",
-    currentHP: 83,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-assassin",
-    ac: 7,
-  },
-  {
-    id: 2,
-    character: "Una Undervoot",
-    player: "Lianne",
-    currentHP: 75,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 5,
-  },
-  {
-    id: 3,
-    character: "B.F. Bagman",
-    player: "Steve",
-    currentHP: 80,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 4,
-    character: "Ryan Wythyneye",
-    player: "Bryam",
-    currentHP: 50,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 5,
-    character: "Gordon Heavyfoot",
-    player: "Roehl",
-    currentHP: 95,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 6,
-    character: "Tiny Tim",
-    player: "John",
-    currentHP: 117,
-    maxHP: 100,
-    ac: 7,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-  },
-];
