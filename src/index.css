@@ -1,3 +1,19 @@
+/*
+  Table of Contents
+  1. CSS Variables (:root)
+  2. Global Resets (*, body)
+  3. Buttons (.btn, .btn-circle, .btn-plus-icon)
+  4. Turn Circle (.turn-circle*)
+  5. Card (.card, .card-meter*)
+  6. Flex Layout (.flex*)
+  7. Popover (.popover*)
+  8. Menu (.menu*)
+  9. Action Trays (.tray*)
+  10. Form Controls (.input, .label)
+  11. Legacy Commented Styles (archived block)
+*/
+
+/* 1. CSS Variables (:root) */
 :root {
   /* Colors */
   --white: #ffffff;
@@ -20,7 +36,7 @@
   --warnLight: #cbcc92;
   /* typography */
   --family: "Jost", Tahoma, Geneva, Verdana, sans-serif;
-  --weight: 300;
+  --weight: 400;
   /* Size */
   --size-micro: 0.125rem;
   --size-smaller: 0.25rem;
@@ -32,6 +48,7 @@
   --overShadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
 }
 
+/* 2. Global Resets (*, body) */
 * {
   box-sizing: border-box;
 }
@@ -48,7 +65,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* button */
+/* 3. Buttons  */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -56,6 +73,39 @@ body {
   padding: 0;
   border: none;
   appearance: none;
+  cursor: pointer;
+
+  &:disabled {
+    color: var(--gray50);
+    background-color: var(--gray02);
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  padding: var(--size-small) var(--size-medium);
+  border: 1px solid var(--info);
+  border-radius: var(--size-micro);
+  background: var(--info);
+  font-size: 0.75rem;
+  letter-spacing: 0.4px;
+  color: var(--white);
+  text-align: center;
+
+  &:focus,
+  &:hover {
+    background-color: var(--infoDark);
+    border-color: var(--infoDark);
+  }
+
+  &:disabled {
+    border-color: var(--gray04);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 .btn-circle {
@@ -64,7 +114,6 @@ body {
   border-radius: 50%;
   background: var(--white);
   box-shadow: var(--baseShadow);
-  cursor: pointer;
   transition: background-color 0.2s ease-out;
 
   &:hover {
@@ -139,10 +188,9 @@ body {
 
   .card-header {
     font-size: 0.75rem;
-    font-weight: 400;
 
     .card-sub {
-      font-weight: var(--weight);
+      color: var(--gray50);
     }
   }
 }
@@ -168,15 +216,22 @@ body {
   }
 }
 
-.flex {
+/* 6. Flex Layout */
+.flex-row,
+.flex-col {
   display: flex;
-
-  &.col {
-    flex-direction: column;
-    gap: var(--size-small);
-  }
+  gap: var(--size-small);
 }
 
+.flex-col {
+  flex-direction: column;
+}
+
+.gap-medium {
+  gap: var(--size-medium);
+}
+
+/* 7. Popover */
 .popover {
   position: relative;
   overflow: visible;
@@ -367,21 +422,55 @@ body {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
+/* 9. Action Trays */
 .tray {
   position: fixed;
-  display: flex;
-  gap: var(--size-small);
   padding: var(--size-medium);
   background-color: rgba(0, 0, 0, 0.05);
 }
 
 .tray-actions {
-  justify-content: center;
   inset: auto var(--size-medium) var(--size-medium);
 }
 
 .tray-characters {
   flex-direction: column;
+}
+
+/* 10. Form Controls  */
+.input {
+  width: 100%;
+  height: 32px;
+  padding: var(--size-small);
+  border: 1px solid #d3d3d3;
+  border-radius: 2px;
+  font-family: Jost-Regular;
+  font-size: 0.75rem;
+  color: #000000;
+  background: #ffffff;
+
+  &:disabled {
+    border-color: var(--gray04);
+    color: var(--gray50);
+    background-color: var(--gray02);
+  }
+
+  &:focus {
+    outline: 2px solid var(--infoDark);
+    box-shadow: none;
+  }
+
+  &:invalid {
+    outline: 2px solid var(--errorDark);
+    color: var(--errorDark);
+  }
+}
+
+.label {
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #000000;
+  margin-bottom: var(--size-micro);
 }
 
 /* :root {

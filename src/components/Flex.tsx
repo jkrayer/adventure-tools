@@ -6,8 +6,11 @@
 
 import type { ReactNode } from "react";
 
+type Gap = "small" | "medium";
+
 type FlexProps = {
   children: ReactNode;
+  gap?: Gap;
   justifyContent?:
     | "flex-start"
     | "center"
@@ -17,19 +20,31 @@ type FlexProps = {
 };
 
 type FlexComponent = ((props: FlexProps) => ReactNode) & {
-  Col: (props: { children: ReactNode }) => ReactNode;
+  Col: (props: { children: ReactNode; gap?: Gap }) => ReactNode;
 };
 
-const Flex = (({ children, justifyContent = "flex-start" }: FlexProps) => {
+const Flex = (({
+  children,
+  gap = "small",
+  justifyContent = "flex-start",
+}: FlexProps) => {
+  const cls = gap === "medium" ? "flex-row gap-medium" : "flex-row";
   return (
-    <div className="flex" style={{ justifyContent }}>
+    <div className={cls} style={{ justifyContent }}>
       {children}
     </div>
   );
 }) as FlexComponent;
 
-Flex.Col = function FlexCol({ children }: { children: ReactNode }) {
-  return <div className="flex col">{children}</div>;
+Flex.Col = function FlexCol({
+  children,
+  gap = "small",
+}: {
+  children: ReactNode;
+  gap?: Gap;
+}) {
+  const cls = gap === "medium" ? "flex-col gap-medium" : "flex-col";
+  return <div className={cls}>{children}</div>;
 };
 
 export default Flex;

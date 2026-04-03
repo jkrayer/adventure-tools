@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react";
+import Flex from "./Flex";
 
 /**
  * Tray is a component used to reserve some portion of the screen for a tool
@@ -14,5 +15,9 @@ export default function ActionTray({ children }: TrayProps) {
 }
 
 export function CharacterTray({ children }: TrayProps) {
-  return <div className="tray tray-characters">{children}</div>;
+  return (
+    <div className="tray tray-characters">
+      <Flex.Col>{children}</Flex.Col>
+    </div>
+  );
 }

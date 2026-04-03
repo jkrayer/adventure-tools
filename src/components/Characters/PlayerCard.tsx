@@ -28,7 +28,7 @@ export default function PlayerCard({
             <a href={link} target="_bank">
               {character}
             </a>
-            <Card.Sub>({player})</Card.Sub>
+            &nbsp;<Card.Sub>({player})</Card.Sub>
           </div>
           <Card.Sub>AC:{ac}</Card.Sub>
         </Flex>
