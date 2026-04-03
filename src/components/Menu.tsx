@@ -1,19 +1,52 @@
 import {
+  type AnchorHTMLAttributes,
   createContext,
   useEffect,
   useId,
   useContext,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
   type MouseEventHandler,
+  type PointerEvent,
   type PropsWithChildren,
   type ReactElement,
 } from "react";
 
-type MenuItemProps = PropsWithChildren<{
-  onClick: MouseEventHandler<HTMLButtonElement>;
+type MenuItemButtonBaseProps = PropsWithChildren<{
+  as?: "button";
   isDisabled?: boolean;
+  holdToConfirmMs?: number;
+}>;
+
+type MenuItemButtonProps = MenuItemButtonBaseProps & {
+  intent?: "default";
+  onClick: MouseEventHandler<HTMLButtonElement>;
+};
+
+type MenuItemDangerousButtonProps = MenuItemButtonBaseProps & {
+  intent: "danger" | "dangerous";
+  onAction: () => void;
+};
+
+type MenuItemAnchorProps = PropsWithChildren<{
+  as: "a";
+  href: string;
+  isDisabled?: boolean;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+}> &
+  Pick<AnchorHTMLAttributes<HTMLAnchorElement>, "target" | "rel">;
+
+type MenuItemProps =
+  | MenuItemButtonProps
+  | MenuItemDangerousButtonProps
+  | MenuItemAnchorProps;
+
+type MenuDangerousItemProps = PropsWithChildren<{
+  holdToConfirmMs?: number;
+  isDisabled?: boolean;
+  onAction: () => void;
 }>;
 
 type MenuProps = PropsWithChildren<{
@@ -44,6 +77,78 @@ const MenuLevelContext = createContext<MenuLevelContextValue>({
 const MenuActionContext = createContext({
   closeAllMenus: () => {},
 });
+
+function MenuDangerousItem({
+  children,
+  holdToConfirmMs = 1000,
+  isDisabled = false,
+  onAction,
+}: MenuDangerousItemProps) {
+  const { closeAllMenus } = useContext(MenuActionContext);
+  const [isHolding, setIsHolding] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+  const isCompleteRef = useRef(false);
+
+  const style = useMemo(
+    () => ({ "--danger-hold-ms": `${holdToConfirmMs}ms` }) as CSSProperties,
+    [holdToConfirmMs],
+  );
+
+  const clearHold = () => {
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (!isCompleteRef.current) {
+      setIsHolding(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const startHold = (event: PointerEvent<HTMLButtonElement>) => {
+    if (isDisabled || event.button !== 0 || timeoutRef.current !== null) {
+      return;
+    }
+
+    isCompleteRef.current = false;
+    setIsHolding(true);
+    timeoutRef.current = window.setTimeout(() => {
+      isCompleteRef.current = true;
+      setIsHolding(false);
+      timeoutRef.current = null;
+      onAction();
+      closeAllMenus();
+    }, holdToConfirmMs);
+  };
+
+  return (
+    <li>
+      <button
+        className={`menu-item menu-item-danger ${isHolding ? "holding" : ""}`}
+        disabled={isDisabled}
+        onClick={(event) => {
+          event.preventDefault();
+        }}
+        onPointerCancel={clearHold}
+        onPointerDown={startHold}
+        onPointerLeave={clearHold}
+        onPointerUp={clearHold}
+        style={style}
+        type="button"
+      >
+        <span className="menu-item-label">{children}</span>
+      </button>
+    </li>
+  );
+}
 
 const Menu = (({ children, onAction }: MenuProps) => {
   const [openSubmenuId, setOpenSubmenuId] = useState<string | null>(null);
@@ -79,12 +184,57 @@ const Menu = (({ children, onAction }: MenuProps) => {
   );
 }) as MenuComponent;
 
-Menu.Item = function MenuItem({
-  children,
-  onClick,
-  isDisabled = false,
-}: MenuItemProps) {
+Menu.Item = function MenuItem(menuItemProps: MenuItemProps) {
+  const { as = "button", children, isDisabled = false } = menuItemProps;
   const { closeAllMenus } = useContext(MenuActionContext);
+
+  if (as === "a") {
+    const { href, onClick, rel, target } = menuItemProps as MenuItemAnchorProps;
+
+    return (
+      <li>
+        <a
+          className="menu-item"
+          href={href}
+          onClick={(event) => {
+            if (isDisabled) {
+              event.preventDefault();
+              return;
+            }
+
+            onClick?.(event);
+
+            if (!event.defaultPrevented) {
+              closeAllMenus();
+            }
+          }}
+          rel={rel}
+          target={target}
+        >
+          {children}
+        </a>
+      </li>
+    );
+  }
+
+  if (
+    "intent" in menuItemProps &&
+    (menuItemProps.intent === "dangerous" || menuItemProps.intent === "danger")
+  ) {
+    const { holdToConfirmMs = 1000, onAction } = menuItemProps;
+
+    return (
+      <MenuDangerousItem
+        holdToConfirmMs={holdToConfirmMs}
+        isDisabled={isDisabled}
+        onAction={onAction}
+      >
+        {children}
+      </MenuDangerousItem>
+    );
+  }
+
+  const { onClick } = menuItemProps as MenuItemButtonProps;
 
   return (
     <li>

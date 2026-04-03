@@ -12,10 +12,10 @@ function App() {
         <Characters />
       </CharacterTray>
       <ToolTray>
-        <GithubLink />
         <span style={{ fontSize: "0.625rem", textAlign: "center" }}>
           {packageJson.version}
         </span>
+        <GithubLink />
       </ToolTray>
       <ActionTray>
         <DungeonTimeTracker />

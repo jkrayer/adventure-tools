@@ -3,11 +3,24 @@ import CharacterCard from "./CharacterCard";
 import CharacterForm from "./CharacterForm";
 import Modal from "../Modal";
 import { AddButton } from "../CircleButton";
-import { useCharacters } from "../../context/CharactersContext";
+import { useCharacters, type Character } from "../../context/CharactersContext";
 
 export default function Characters() {
-  const { characters, updateCharacterHP } = useCharacters();
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const { characters, deleteCharacter, updateCharacterHP } = useCharacters();
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false);
+  const [editingCharacter, setEditingCharacter] = useState<Character | null>(
+    null,
+  );
+
+  const openCreateModal = () => {
+    setEditingCharacter(null);
+    setIsFormModalOpen(true);
+  };
+
+  const openEditModal = (character: Character) => {
+    setEditingCharacter(character);
+    setIsFormModalOpen(true);
+  };
 
   return (
     <>
@@ -19,22 +32,23 @@ export default function Characters() {
           currentHP={player.currentHP}
           link={player.link}
           maxHP={player.maxHP}
+          onDelete={() => deleteCharacter(player.id)}
+          onEdit={() => openEditModal(player)}
           onHPChange={(newHP) => updateCharacterHP(player.id, newHP)}
           player={player.player}
         />
       ))}
 
-      <AddButton
-        onClick={() => setIsCreateModalOpen(true)}
-        title="Add character"
-      />
+      <AddButton onClick={openCreateModal} title="Add character" />
 
       <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title="Add Character"
+        isOpen={isFormModalOpen}
+        onClose={() => setIsFormModalOpen(false)}
+        title={editingCharacter ? "Edit Character" : "Add Character"}
       >
-        {({ close }) => <CharacterForm onClose={close} />}
+        {({ close }) => (
+          <CharacterForm editingCharacter={editingCharacter} onClose={close} />
+        )}
       </Modal>
     </>
   );

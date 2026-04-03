@@ -1,6 +1,50 @@
 import Card from "../Card";
 import Flex from "../Flex";
+import Menu from "../Menu";
 import PopOver from "../Popover";
+
+function CharacterOptionsMenu({
+  link,
+  onDelete,
+  onEdit,
+}: {
+  link: string;
+  onDelete: () => void;
+  onEdit: () => void;
+}) {
+  const { close } = PopOver.useControls();
+
+  return (
+    <Menu onAction={close}>
+      <Menu.Item as="a" href={link} rel="noopener noreferrer" target="_blank">
+        Open Rules
+      </Menu.Item>
+      <Menu.Item onClick={onEdit}>Edit Character</Menu.Item>
+      <Menu.Item intent="danger" onAction={onDelete}>
+        Remove Character
+      </Menu.Item>
+    </Menu>
+  );
+}
+
+function CharacterOptionsTrigger() {
+  const triggerProps = PopOver.useTrigger();
+  const { isOpen } = PopOver.useControls();
+
+  return (
+    <button
+      aria-expanded={isOpen}
+      aria-label="Character options"
+      className={`character-card-menu-btn ${isOpen ? "open" : ""}`}
+      type="button"
+      {...triggerProps}
+    >
+      <span className="character-card-menu-line top" />
+      <span className="character-card-menu-line middle" />
+      <span className="character-card-menu-line bottom" />
+    </button>
+  );
+}
 
 export default function PlayerCard({
   character,
@@ -9,6 +53,8 @@ export default function PlayerCard({
   maxHP,
   player,
   ac,
+  onDelete,
+  onEdit,
   onHPChange,
 }: {
   character: string;
@@ -17,17 +63,16 @@ export default function PlayerCard({
   maxHP: number;
   player: string;
   ac: number;
+  onDelete: () => void;
+  onEdit: () => void;
   onHPChange: (arg0: number) => void;
 }) {
-  console.log(23, link);
   return (
-    <Card>
+    <Card className="character-card">
       <Card.Header>
         <Flex justifyContent="space-between">
           <div>
-            <a href={link} target="_bank">
-              {character}
-            </a>
+            {character}
             &nbsp;<Card.Sub>({player})</Card.Sub>
           </div>
           <Card.Sub>AC:{ac}</Card.Sub>
@@ -47,6 +92,19 @@ export default function PlayerCard({
           />
         </PopOver.Body>
       </PopOver>
+
+      <div className="character-card-options">
+        <PopOver placement="below">
+          <CharacterOptionsTrigger />
+          <PopOver.Body>
+            <CharacterOptionsMenu
+              link={link}
+              onDelete={onDelete}
+              onEdit={onEdit}
+            />
+          </PopOver.Body>
+        </PopOver>
+      </div>
     </Card>
   );
 }

@@ -3,14 +3,18 @@ import Form from "../Form.tsx";
 import Input from "../Input.tsx";
 import Label from "../Label.tsx";
 import Flex from "../Flex.tsx";
-import { useCharacters } from "../../context/CharactersContext";
+import { useCharacters, type Character } from "../../context/CharactersContext";
 
 type CharacterFormProps = {
+  editingCharacter?: Character | null;
   onClose: () => void;
 };
 
-export default function CharacterForm({ onClose }: CharacterFormProps) {
-  const { createNew } = useCharacters();
+export default function CharacterForm({
+  editingCharacter,
+  onClose,
+}: CharacterFormProps) {
+  const { createNew, updateCharacter } = useCharacters();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     const formData = new FormData(event.currentTarget);
@@ -26,16 +30,22 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
     const ac = Number(formData.get("character-ac") ?? 0);
     const link = String(formData.get("player-link") ?? "").trim();
 
-    createNew({
+    const nextCharacter = {
       ac,
       character,
       currentHP,
       link,
       maxHP,
       player,
-    });
+    };
 
-    event.currentTarget.reset();
+    if (editingCharacter) {
+      updateCharacter(editingCharacter.id, nextCharacter);
+    } else {
+      createNew(nextCharacter);
+      event.currentTarget.reset();
+    }
+
     onClose();
   };
 
@@ -48,6 +58,7 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
               <Label htmlFor="player-name">Player:</Label>
               <Input
                 autoFocus
+                defaultValue={editingCharacter?.player ?? ""}
                 id="player-name"
                 name="player-name"
                 required
@@ -57,6 +68,7 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
             <div>
               <Label htmlFor="character-name">Character:</Label>
               <Input
+                defaultValue={editingCharacter?.character ?? ""}
                 id="character-name"
                 name="character-name"
                 type="text"
@@ -68,6 +80,7 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
             <div>
               <Label htmlFor="character-hp-max">H.P. (max):</Label>
               <Input
+                defaultValue={editingCharacter?.maxHP ?? ""}
                 id="character-hp-max"
                 name="character-hp-max"
                 type="number"
@@ -79,6 +92,7 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
             <div>
               <Label htmlFor="character-hp-current">H.P. (current):</Label>
               <Input
+                defaultValue={editingCharacter?.currentHP ?? ""}
                 id="character-hp-current"
                 name="character-hp-current"
                 type="number"
@@ -89,6 +103,7 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
             <div>
               <Label htmlFor="character-ac">A.C.:</Label>
               <Input
+                defaultValue={editingCharacter?.ac ?? ""}
                 id="character-ac"
                 name="character-ac"
                 type="number"
@@ -101,7 +116,12 @@ export default function CharacterForm({ onClose }: CharacterFormProps) {
           </Flex>
           <div>
             <Label htmlFor="player-link">Link:</Label>
-            <Input id="player-link" name="player-link" type="url" />
+            <Input
+              defaultValue={editingCharacter?.link ?? ""}
+              id="player-link"
+              name="player-link"
+              type="url"
+            />
           </div>
           <Flex gap="medium" justifyContent="flex-end">
             <button className="btn btn-primary" type="submit">

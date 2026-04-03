@@ -7,6 +7,7 @@ type ModalRenderControls = {
 type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  header?: ReactNode | ((controls: ModalRenderControls) => ReactNode);
   title?: ReactNode;
   children: ReactNode | ((controls: ModalRenderControls) => ReactNode);
 };
@@ -30,7 +31,7 @@ function getTopModalId(): string | undefined {
   return openModalStack[openModalStack.length - 1];
 }
 
-function Modal({ isOpen, onClose, title, children }: ModalProps) {
+function Modal({ isOpen, onClose, header, title, children }: ModalProps) {
   const modalId = useId();
 
   useEffect(() => {
@@ -75,25 +76,32 @@ function Modal({ isOpen, onClose, title, children }: ModalProps) {
     return null;
   }
 
+  const resolvedHeader =
+    typeof header === "function" ? header({ close: onClose }) : header;
+
   return (
     <div className="overlay">
       <div aria-modal="true" className="modal" role="dialog">
         <div className="modal-header">
-          <div>{title}</div>
-          <button
-            aria-label="Close modal"
-            onClick={onClose}
-            style={{
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              fontSize: "1rem",
-              lineHeight: 1,
-            }}
-            type="button"
-          >
-            X
-          </button>
+          {resolvedHeader ?? (
+            <>
+              <div>{title}</div>
+              <button
+                aria-label="Close modal"
+                onClick={onClose}
+                style={{
+                  border: "none",
+                  background: "transparent",
+                  cursor: "pointer",
+                  fontSize: "1rem",
+                  lineHeight: 1,
+                }}
+                type="button"
+              >
+                X
+              </button>
+            </>
+          )}
         </div>
         <div className="modal-content">
           {typeof children === "function"

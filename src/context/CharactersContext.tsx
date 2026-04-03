@@ -21,6 +21,8 @@ type CharactersContextValue = {
   characters: Character[];
   setCharacters: Dispatch<SetStateAction<Character[]>>;
   createNew: (character: Omit<Character, "id">) => void;
+  deleteCharacter: (id: number) => void;
+  updateCharacter: (id: number, character: Omit<Character, "id">) => void;
   updateCharacterHP: (id: number, currentHP: number) => void;
 };
 
@@ -61,9 +63,34 @@ export function CharactersProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const updateCharacter = (id: number, character: Omit<Character, "id">) => {
+    setCharacters((prev) =>
+      prev.map((currentCharacter) =>
+        currentCharacter.id === id
+          ? {
+              ...currentCharacter,
+              ...character,
+              currentHP: character.currentHP || character.maxHP,
+            }
+          : currentCharacter,
+      ),
+    );
+  };
+
+  const deleteCharacter = (id: number) => {
+    setCharacters((prev) => prev.filter((character) => character.id !== id));
+  };
+
   return (
     <CharactersContext.Provider
-      value={{ characters, setCharacters, createNew, updateCharacterHP }}
+      value={{
+        characters,
+        setCharacters,
+        createNew,
+        deleteCharacter,
+        updateCharacter,
+        updateCharacterHP,
+      }}
     >
       {children}
     </CharactersContext.Provider>
