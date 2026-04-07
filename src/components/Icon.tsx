@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-type IconName = "plus" | "back" | "forward" | "github";
+type IconName = "plus" | "back" | "forward" | "github" | "table";
 
 type IconProps = SVGProps<SVGSVGElement> & {
   name: IconName;
@@ -53,6 +53,29 @@ function Icon({ name, className, ...props }: IconProps) {
       >
         <rect x="0" y="7" width="14" height="2" />
         <polygon points="16,8 9,4 9,12" />
+      </svg>
+    );
+  }
+
+  if (name === "table") {
+    return (
+      <svg
+        {...props}
+        className={baseClass}
+        height="8"
+        viewBox="0 0 14 8"
+        width="14"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect x="0" y="0" width="4" height="2" />
+        <rect x="5" y="0" width="4" height="2" />
+        <rect x="10" y="0" width="4" height="2" />
+        <rect x="0" y="3" width="4" height="2" />
+        <rect x="5" y="3" width="4" height="2" />
+        <rect x="10" y="3" width="4" height="2" />
+        <rect x="0" y="6" width="4" height="2" />
+        <rect x="5" y="6" width="4" height="2" />
+        <rect x="10" y="6" width="4" height="2" />
       </svg>
     );
   }
