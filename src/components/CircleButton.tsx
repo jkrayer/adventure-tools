@@ -66,8 +66,8 @@ export const ForwardButton = ({
 };
 
 export const GithubLink = ({
-  href = "https://github.com/jkrayer/project-goldenrod",
-  title = "GitHub repository",
+  href = "https://github.com/jkrayer/adventure-tools",
+  title = "GitHub Repository",
   ...props
 }: Omit<CircleLinkProps, "children">) => {
   return (

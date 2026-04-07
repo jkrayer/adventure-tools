@@ -1,6 +1,8 @@
 {
-  "name": "tools",
-  "private": true,
+  "name": "adventure-tools",
+  "description": "A theater-of-the-mind VTT",
+  "author": "James Krayer <jameskrayer@yahoo.com>",
+  "license": "MIT",
   "version": "0.1.0",
   "type": "module",
   "scripts": {
@@ -11,7 +13,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@project_goldenrod/shared": "file:../shared",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },
