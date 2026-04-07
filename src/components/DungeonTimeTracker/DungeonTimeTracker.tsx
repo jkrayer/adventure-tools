@@ -21,6 +21,7 @@ function DungeonTimeTrackerContent() {
       <BackButton
         disabled={currentHourIndex === 0}
         onClick={goToPreviousHour}
+        title="Previous Hour"
       />
       <div
         style={{
@@ -38,9 +39,9 @@ function DungeonTimeTrackerContent() {
         <TimeCircle turnIndex={5} />
       </div>
       {currentHourIndex === hours.length - 1 ? (
-        <AddButton onClick={addHour} />
+        <AddButton onClick={addHour} title="Add Hour" />
       ) : (
-        <ForwardButton onClick={goToNextHour} />
+        <ForwardButton onClick={goToNextHour} title="Next Hour" />
       )}
     </div>
   );
