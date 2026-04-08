@@ -383,6 +383,31 @@ body {
   }
 }
 
+.table-button-popover .popover-body {
+  left: auto;
+  right: 0;
+
+  &.above {
+    transform: translate3d(0, 0.35rem, 0) scale(0.92, 0.55);
+    transform-origin: bottom right;
+  }
+
+  &.below {
+    transform: translate3d(0, -0.35rem, 0) scale(0.92, 0.55);
+    transform-origin: top right;
+  }
+
+  &.open {
+    transform: translate3d(0, 0, 0) scale(1, 1);
+  }
+
+  &::after {
+    left: auto;
+    right: calc(var(--size-medium) - 0.375rem);
+    transform: none;
+  }
+}
+
 /* See 3. Buttons */
 .popover-trigger {
   display: block;
