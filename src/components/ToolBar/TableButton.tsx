@@ -4,7 +4,9 @@ import Icon from "../Icon";
 import Menu from "../Menu";
 import Modal from "../Modal";
 import PopOver from "../Popover";
+import RollTable from "../RollTable";
 import { useTables } from "../../context/TablesContext";
+import TableForm from "./TableForm";
 
 type ActiveModalState =
   | { type: "none" }
@@ -108,13 +110,9 @@ export default function TableButton() {
         title={modalTitle}
       >
         {activeModal.type === "create" ? (
-          <p>New table form will be added here.</p>
+          <TableForm onClose={closeModal} />
         ) : (
-          <p>
-            {selectedTable
-              ? `Table rendering for ${selectedTable.name} will be added here.`
-              : "Selected table was not found."}
-          </p>
+          <>{selectedTable ? <RollTable table={selectedTable} /> : null}</>
         )}
       </Modal>
     </>

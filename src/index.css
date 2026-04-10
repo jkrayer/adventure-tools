@@ -5,12 +5,14 @@
   3. Buttons (.btn, .btn-circle, .btn-standard, .btn-overlay)
   4. Turn Circle (.turn-circle*)
   5. Card (.card, .card-meter*)
-  6. Flex Layout (.flex*)
-  7. Popover (.popover*)
-  8. Menu (.menu*)
-  9. Action Trays (.tray*)
-  10. Form Controls (.input, .label)
-  11. Legacy Commented Styles (archived block)
+  6. Table (.table*)
+  7. Flex Layout (.flex*)
+  8. Popover (.popover*)
+  9. Menu (.menu*)
+  10. Action Trays (.tray*)
+  11. Form Controls (.input, .label)
+  12. Utilities
+  13. Legacy Commented Styles (archived block)
 */
 
 /* 1. CSS Variables (:root) */
@@ -285,7 +287,34 @@ body {
   }
 }
 
-/* 6. Flex Layout */
+/* 6. Table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+
+  caption {
+    caption-side: bottom;
+    padding-top: var(--size-small);
+    text-align: left;
+  }
+
+  th {
+    font-family: var(--family);
+    font-weight: 500;
+  }
+
+  th,
+  td {
+    padding: var(--size-small);
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--gray02);
+  }
+}
+
+/* 7. Flex Layout */
 .flex-row,
 .flex-col {
   display: flex;
@@ -300,7 +329,7 @@ body {
   gap: var(--size-medium);
 }
 
-/* 7. Popover */
+/* 8. Popover */
 .popover {
   position: relative;
   overflow: visible;
@@ -473,7 +502,7 @@ body {
   }
 }
 
-/* 8. Menu */
+/* 9. Menu */
 .menu {
   margin: 0;
   padding: var(--size-micro);
@@ -608,7 +637,7 @@ body {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
-/* 9. Action Trays */
+/* 10. Action Trays */
 .tray {
   position: fixed;
   padding: var(--size-medium);
@@ -627,7 +656,7 @@ body {
   inset: 0 0 0 auto;
 }
 
-/* 10. Form Controls  */
+/* 11. Form Controls  */
 .input {
   width: 100%;
   height: 32px;
@@ -656,11 +685,102 @@ body {
   }
 }
 
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 .label {
   font-size: 0.75rem;
   line-height: 1;
   color: #000000;
   margin-bottom: var(--size-micro);
+}
+
+.table-form-shell {
+  width: 560px;
+  max-width: 100%;
+}
+
+.table-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: end;
+  gap: var(--size-small);
+  margin-bottom: var(--size-medium);
+}
+
+.table-form-name {
+  min-width: 0;
+}
+
+.input.input-short {
+  width: 4.5ch;
+  min-width: 4.5ch;
+  padding-inline: 0.25rem;
+  text-align: center;
+}
+
+.table-entry-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-small);
+  margin-bottom: var(--size-medium);
+}
+
+.table-entry-row {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--size-small);
+}
+
+.table-entry-effect {
+  min-width: 0;
+}
+
+.table-entry-remove {
+  display: flex;
+  align-items: end;
+}
+
+.table-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--size-small);
+}
+
+.table-form-error {
+  margin: 0 0 var(--size-small);
+  color: var(--errorDark);
+  font-size: 0.75rem;
+}
+
+/* Accessibility */
+.visually-hidden {
+  position: absolute; /* Remove from normal flow */
+  width: 1px; /* Minimal width */
+  height: 1px; /* Minimal height */
+  margin: -1px; /* Prevent layout shifts */
+  padding: 0; /* No padding */
+  overflow: hidden; /* Hide overflow */
+  clip: rect(0, 0, 0, 0); /* Clip the element */
+  white-space: nowrap; /* Prevent text wrapping */
+}
+
+/* 12. Utilities */
+.mh-m {
+  margin-top: var(--size-medium);
+  margin-bottom: var(--size-medium);
+}
+
+.mh-xs {
+  margin-top: var(--size-smaller);
+  margin-bottom: var(--size-smaller);
 }
 
 /* :root {

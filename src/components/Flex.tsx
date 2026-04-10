@@ -10,6 +10,7 @@ type Gap = "small" | "medium";
 
 type FlexProps = {
   children: ReactNode;
+  className?: string;
   gap?: Gap;
   justifyContent?:
     | "flex-start"
@@ -25,10 +26,15 @@ type FlexComponent = ((props: FlexProps) => ReactNode) & {
 
 const Flex = (({
   children,
+  className = "",
   gap = "small",
   justifyContent = "flex-start",
 }: FlexProps) => {
-  const cls = gap === "medium" ? "flex-row gap-medium" : "flex-row";
+  const cls =
+    gap === "medium"
+      ? `flex-row gap-medium ${className}`
+      : `flex-row ${className}`;
+
   return (
     <div className={cls} style={{ justifyContent }}>
       {children}
