@@ -60,7 +60,7 @@ function TableMenu({
 }
 
 export default function TableButton() {
-  const { getTableById } = useTables();
+  const { deleteTable, getTableById } = useTables();
   const [activeModal, setActiveModal] = useState<ActiveModalState>({
     type: "none",
   });
@@ -112,7 +112,17 @@ export default function TableButton() {
         {activeModal.type === "create" ? (
           <TableForm onClose={closeModal} />
         ) : (
-          <>{selectedTable ? <RollTable table={selectedTable} /> : null}</>
+          <>
+            {selectedTable ? (
+              <RollTable
+                onDelete={() => {
+                  deleteTable(selectedTable.id);
+                  closeModal();
+                }}
+                table={selectedTable}
+              />
+            ) : null}
+          </>
         )}
       </Modal>
     </>

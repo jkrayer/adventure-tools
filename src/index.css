@@ -314,6 +314,23 @@ body {
   }
 }
 
+.roll-table-shell {
+  width: 100%;
+}
+
+.roll-table-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--size-medium);
+}
+
+.roll-table-delete-button {
+  width: auto;
+  min-width: 8rem;
+  margin: 0;
+  text-align: center;
+}
+
 /* 7. Flex Layout */
 .flex-row,
 .flex-col {

@@ -1,39 +1,87 @@
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
+import type { PointerEvent } from "react";
 import type { Table as TableData } from "../context/TablesContext";
 import Table from "./Table";
 
 type RollTableProps = {
+  onDelete: () => void;
   table: TableData;
 };
 
-export default function RollTable({ table }: RollTableProps) {
+export default function RollTable({ onDelete, table }: RollTableProps) {
+  const holdToConfirmMs = 1000;
+  const [isHoldingDelete, setIsHoldingDelete] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
+  const isCompleteRef = useRef(false);
+
+  const deleteButtonStyle = useMemo(
+    () => ({ "--danger-hold-ms": `${holdToConfirmMs}ms` }) as CSSProperties,
+    [holdToConfirmMs],
+  );
+
+  const clearDeleteHold = () => {
+    if (timeoutRef.current !== null) {
+      window.clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+
+    if (!isCompleteRef.current) {
+      setIsHoldingDelete(false);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) {
+        window.clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const startDeleteHold = (event: PointerEvent<HTMLButtonElement>) => {
+    if (event.button !== 0 || timeoutRef.current !== null) {
+      return;
+    }
+
+    isCompleteRef.current = false;
+    setIsHoldingDelete(true);
+    timeoutRef.current = window.setTimeout(() => {
+      isCompleteRef.current = true;
+      setIsHoldingDelete(false);
+      timeoutRef.current = null;
+      onDelete();
+    }, holdToConfirmMs);
+  };
+
   const hasManyEntries = table.entries.length > 10;
-
-  if (!hasManyEntries) {
-    return (
-      <Table caption={table.dice}>
-        <thead>
-          <tr>
-            <th scope="col">Roll</th>
-            <th scope="col">Effect</th>
-          </tr>
-        </thead>
-        <tbody>
-          {table.entries.map((entry, index) => (
-            <tr key={`${entry.roll}-${index}`}>
-              <td>{entry.roll}</td>
-              <td>{entry.effect}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-    );
-  }
-
   const midpoint = Math.ceil(table.entries.length / 2);
   const leftEntries = table.entries.slice(0, midpoint);
   const rightEntries = table.entries.slice(midpoint);
 
-  return (
+  const tableBody = !hasManyEntries ? (
+    <Table caption={table.dice}>
+      <thead>
+        <tr>
+          <th scope="col">Roll</th>
+          <th scope="col">Effect</th>
+        </tr>
+      </thead>
+      <tbody>
+        {table.entries.map((entry, index) => (
+          <tr key={`${entry.roll}-${index}`}>
+            <td>{entry.roll}</td>
+            <td>{entry.effect}</td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  ) : (
     <Table caption={table.dice}>
       <thead>
         <tr>
@@ -58,5 +106,27 @@ export default function RollTable({ table }: RollTableProps) {
         })}
       </tbody>
     </Table>
+  );
+
+  return (
+    <div className="roll-table-shell">
+      {tableBody}
+      <div className="roll-table-actions">
+        <button
+          className={`menu-item menu-item-danger roll-table-delete-button ${isHoldingDelete ? "holding" : ""}`}
+          onClick={(event) => {
+            event.preventDefault();
+          }}
+          onPointerCancel={clearDeleteHold}
+          onPointerDown={startDeleteHold}
+          onPointerLeave={clearDeleteHold}
+          onPointerUp={clearDeleteHold}
+          style={deleteButtonStyle}
+          type="button"
+        >
+          <span className="menu-item-label">Delete Table</span>
+        </button>
+      </div>
+    </div>
   );
 }
