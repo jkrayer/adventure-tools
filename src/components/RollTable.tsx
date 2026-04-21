@@ -10,11 +10,12 @@ import type { Table as TableData } from "../context/TablesContext";
 import Table from "./Table";
 
 type RollTableProps = {
+  onEdit: () => void;
   onDelete: () => void;
   table: TableData;
 };
 
-export default function RollTable({ onDelete, table }: RollTableProps) {
+export default function RollTable({ onDelete, onEdit, table }: RollTableProps) {
   const holdToConfirmMs = 1000;
   const [isHoldingDelete, setIsHoldingDelete] = useState(false);
   const timeoutRef = useRef<number | null>(null);
@@ -112,6 +113,13 @@ export default function RollTable({ onDelete, table }: RollTableProps) {
     <div className="roll-table-shell">
       {tableBody}
       <div className="roll-table-actions">
+        <button
+          className="btn btn-standard info"
+          onClick={onEdit}
+          type="button"
+        >
+          Edit Table
+        </button>
         <button
           className={`menu-item menu-item-danger roll-table-delete-button ${isHoldingDelete ? "holding" : ""}`}
           onClick={(event) => {

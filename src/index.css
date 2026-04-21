@@ -321,6 +321,7 @@ body {
 .roll-table-actions {
   display: flex;
   justify-content: flex-end;
+  gap: var(--size-small);
   margin-top: var(--size-medium);
 }
 
@@ -462,7 +463,10 @@ body {
 }
 
 .modal {
+  display: flex;
+  flex-direction: column;
   width: 400px;
+  max-height: 90vh;
   background: #ffffff;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
   border-radius: 4px;
@@ -484,6 +488,8 @@ body {
 }
 
 .modal-content {
+  min-height: 0;
+  overflow-y: auto;
   padding: var(--size-large);
 }
 

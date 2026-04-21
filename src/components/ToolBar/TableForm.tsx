@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import Form from "../Form";
 import Input from "../Input";
 import Label from "../Label";
-import { useTables } from "../../context/TablesContext";
+import { type Table, useTables } from "../../context/TablesContext";
 import Flex from "../Flex";
 
 type TableEntryDraft = {
@@ -12,22 +12,67 @@ type TableEntryDraft = {
 };
 
 type TableFormProps = {
+  mode?: "create" | "edit";
   onClose: () => void;
+  table?: Table;
 };
 
 // THIS NEEDS TO BE BUILT MANUALLY
-export default function TableForm({ onClose }: TableFormProps) {
+export default function TableForm({
+  mode = "create",
+  onClose,
+  table,
+}: TableFormProps) {
   // CONTEXT
-  const { createTable } = useTables();
+  const { createTable, updateTable } = useTables();
+
+  const [initialDiceCount, initialDieSides] = useMemo(() => {
+    if (mode !== "edit" || !table) {
+      return [1, 4] as const;
+    }
+
+    const [count, sides] = table.dice.toLowerCase().split("d");
+    const parsedCount = Number(count);
+    const parsedSides = Number(sides);
+
+    return [
+      Number.isFinite(parsedCount) && parsedCount > 0 ? parsedCount : 1,
+      Number.isFinite(parsedSides) && parsedSides > 0 ? parsedSides : 4,
+    ] as const;
+  }, [mode, table]);
+
+  const initialEntries = useMemo<TableEntryDraft[]>(() => {
+    if (mode !== "edit" || !table || table.entries.length === 0) {
+      return [
+        { start: 1, end: initialDiceCount * initialDieSides, effect: "" },
+      ];
+    }
+
+    return table.entries.map((entry) => {
+      const range = entry.roll.split("-").map((value) => Number(value.trim()));
+
+      if (
+        range.length === 2 &&
+        Number.isFinite(range[0]) &&
+        Number.isFinite(range[1])
+      ) {
+        return { start: range[0], end: range[1], effect: entry.effect };
+      }
+
+      const singleRoll = Number(entry.roll.trim());
+      const safeRoll = Number.isFinite(singleRoll) ? singleRoll : 1;
+
+      return { start: safeRoll, end: safeRoll, effect: entry.effect };
+    });
+  }, [initialDiceCount, initialDieSides, mode, table]);
 
   // STATE
-  const [name, setName] = useState<string>("");
-  const [diceCount, setDiceCount] = useState<number>(1);
-  const [dieSides, setDieSides] = useState<number>(4);
-
-  const [entries, setEntries] = useState<TableEntryDraft[]>([
-    { start: 1, end: 4, effect: "" },
-  ]);
+  const [name, setName] = useState<string>(
+    mode === "edit" && table ? table.name : "",
+  );
+  const [diceCount, setDiceCount] = useState<number>(initialDiceCount);
+  const [dieSides, setDieSides] = useState<number>(initialDieSides);
+  const [entries, setEntries] = useState<TableEntryDraft[]>(initialEntries);
 
   const updateEntry = (index: number, nextEntry: Partial<TableEntryDraft>) => {
     setEntries((prev) => {
@@ -55,14 +100,21 @@ export default function TableForm({ onClose }: TableFormProps) {
   };
 
   const handlerSubmit = () => {
-    createTable({
+    const nextTable = {
       name,
       dice: `${diceCount}d${dieSides}`,
       entries: entries.map(({ start, end, effect }) => ({
         roll: `${start}-${end}`,
         effect,
       })),
-    });
+    };
+
+    if (mode === "edit" && table) {
+      updateTable(table.id, nextTable);
+    } else {
+      createTable(nextTable);
+    }
+
     onClose();
   };
 
@@ -186,7 +238,7 @@ export default function TableForm({ onClose }: TableFormProps) {
       <Flex className="mh-m" justifyContent="flex-end">
         <div>
           <button className="btn btn-standard info" type="submit">
-            Save Table
+            {mode === "edit" ? "Update Table" : "Save Table"}
           </button>
         </div>
       </Flex>

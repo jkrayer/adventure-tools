@@ -11,6 +11,7 @@ import TableForm from "./TableForm";
 type ActiveModalState =
   | { type: "none" }
   | { type: "create" }
+  | { type: "edit"; tableId: number }
   | { type: "table"; tableId: number };
 
 function TablePopoverTrigger() {
@@ -66,7 +67,7 @@ export default function TableButton() {
   });
 
   const selectedTable = useMemo(() => {
-    if (activeModal.type !== "table") {
+    if (activeModal.type !== "table" && activeModal.type !== "edit") {
       return undefined;
     }
 
@@ -85,10 +86,16 @@ export default function TableButton() {
     setActiveModal({ type: "table", tableId });
   };
 
+  const openEditTableModal = (tableId: number) => {
+    setActiveModal({ type: "edit", tableId });
+  };
+
   const modalTitle =
     activeModal.type === "create"
       ? "New Table"
-      : (selectedTable?.name ?? "Table");
+      : activeModal.type === "edit"
+        ? "Edit Table"
+        : (selectedTable?.name ?? "Table");
 
   return (
     <>
@@ -111,6 +118,16 @@ export default function TableButton() {
       >
         {activeModal.type === "create" ? (
           <TableForm onClose={closeModal} />
+        ) : activeModal.type === "edit" ? (
+          <>
+            {selectedTable ? (
+              <TableForm
+                mode="edit"
+                onClose={closeModal}
+                table={selectedTable}
+              />
+            ) : null}
+          </>
         ) : (
           <>
             {selectedTable ? (
@@ -118,6 +135,9 @@ export default function TableButton() {
                 onDelete={() => {
                   deleteTable(selectedTable.id);
                   closeModal();
+                }}
+                onEdit={() => {
+                  openEditTableModal(selectedTable.id);
                 }}
                 table={selectedTable}
               />
