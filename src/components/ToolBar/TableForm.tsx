@@ -1,9 +1,15 @@
 import { useMemo, useState } from "react";
+import Flex from "../Flex";
 import Form from "../Form";
 import Input from "../Input";
 import Label from "../Label";
-import { type Table, useTables } from "../../context/TablesContext";
-import Flex from "../Flex";
+import { useTables } from "../../context/TablesContext";
+
+const ALLOWED_DIE_TYPES: dieType[] = [4, 6, 8, 10, 12, 20, 100];
+
+const toDieType = (value: number): dieType => {
+  return ALLOWED_DIE_TYPES.includes(value as dieType) ? (value as dieType) : 4;
+};
 
 type TableEntryDraft = {
   start: number;
@@ -31,13 +37,11 @@ export default function TableForm({
       return [1, 4] as const;
     }
 
-    const [count, sides] = table.dice.toLowerCase().split("d");
-    const parsedCount = Number(count);
-    const parsedSides = Number(sides);
-
     return [
-      Number.isFinite(parsedCount) && parsedCount > 0 ? parsedCount : 1,
-      Number.isFinite(parsedSides) && parsedSides > 0 ? parsedSides : 4,
+      Number.isFinite(table.noOfDice) && table.noOfDice > 0
+        ? table.noOfDice
+        : 1,
+      toDieType(table.dieType),
     ] as const;
   }, [mode, table]);
 
@@ -48,22 +52,7 @@ export default function TableForm({
       ];
     }
 
-    return table.entries.map((entry) => {
-      const range = entry.roll.split("-").map((value) => Number(value.trim()));
-
-      if (
-        range.length === 2 &&
-        Number.isFinite(range[0]) &&
-        Number.isFinite(range[1])
-      ) {
-        return { start: range[0], end: range[1], effect: entry.effect };
-      }
-
-      const singleRoll = Number(entry.roll.trim());
-      const safeRoll = Number.isFinite(singleRoll) ? singleRoll : 1;
-
-      return { start: safeRoll, end: safeRoll, effect: entry.effect };
-    });
+    return table.entries;
   }, [initialDiceCount, initialDieSides, mode, table]);
 
   // STATE
@@ -71,7 +60,7 @@ export default function TableForm({
     mode === "edit" && table ? table.name : "",
   );
   const [diceCount, setDiceCount] = useState<number>(initialDiceCount);
-  const [dieSides, setDieSides] = useState<number>(initialDieSides);
+  const [dieSides, setDieSides] = useState<dieType>(initialDieSides);
   const [entries, setEntries] = useState<TableEntryDraft[]>(initialEntries);
 
   const updateEntry = (index: number, nextEntry: Partial<TableEntryDraft>) => {
@@ -102,11 +91,9 @@ export default function TableForm({
   const handlerSubmit = () => {
     const nextTable = {
       name,
-      dice: `${diceCount}d${dieSides}`,
-      entries: entries.map(({ start, end, effect }) => ({
-        roll: `${start}-${end}`,
-        effect,
-      })),
+      noOfDice: diceCount,
+      dieType: dieSides,
+      entries,
     };
 
     if (mode === "edit" && table) {
@@ -161,7 +148,9 @@ export default function TableForm({
             id="table-die-sides"
             min={1}
             name="table-die-sides"
-            onChange={(event) => setDieSides(event.target.valueAsNumber || 1)}
+            onChange={(event) =>
+              setDieSides(toDieType(event.target.valueAsNumber || 4))
+            }
             required
             step={1}
             type="number"
