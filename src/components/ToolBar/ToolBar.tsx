@@ -1,6 +1,6 @@
 import TableButton from "./TableButton";
-import { GithubLink } from "../CircleButton";
 import { Tools } from "../ActionTray";
+import { GithubLink } from "../CircleButton";
 import packageJson from "../../../package.json";
 
 export default function ToolBar() {
