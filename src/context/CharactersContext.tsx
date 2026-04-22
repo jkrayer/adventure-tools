@@ -7,16 +7,6 @@ import {
 } from "react";
 import { useSyncState, CHARACTERS_STORAGE_KEY } from "../lib";
 
-export type Character = {
-  id: number;
-  ac: number;
-  character: string;
-  currentHP: number;
-  link: string;
-  maxHP: number;
-  player: string;
-};
-
 type CharactersContextValue = {
   characters: Character[];
   setCharacters: Dispatch<SetStateAction<Character[]>>;

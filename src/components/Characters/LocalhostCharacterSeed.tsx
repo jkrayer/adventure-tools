@@ -1,63 +1,7 @@
 import { useEffect } from "react";
-import { useCharacters, type Character } from "../../context/CharactersContext";
-import { CHARACTERS_STORAGE_KEY } from "../../lib";
-
-const localhostCharacters: Character[] = [
-  {
-    id: 1,
-    character: "Dell Graybeard",
-    player: "Jeff",
-    currentHP: 83,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-assassin",
-    ac: 7,
-  },
-  {
-    id: 2,
-    character: "Una Undervoot",
-    player: "Lianne",
-    currentHP: 75,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 5,
-  },
-  {
-    id: 3,
-    character: "B.F. Bagman",
-    player: "Steve",
-    currentHP: 80,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 4,
-    character: "Ryan Wythyneye",
-    player: "Bryam",
-    currentHP: 50,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 5,
-    character: "Gordon Heavyfoot",
-    player: "Roehl",
-    currentHP: 95,
-    maxHP: 100,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-    ac: 7,
-  },
-  {
-    id: 6,
-    character: "Tiny Tim",
-    player: "John",
-    currentHP: 117,
-    maxHP: 100,
-    ac: 7,
-    link: "https://jameskrayer.com/dungeons-and-dragons/house-rules/#anchor-thief",
-  },
-];
+import { useCharacters, useTables } from "../../context";
+import { START_CHARACTERS, START_TABLES } from "../../data";
+import { CHARACTERS_STORAGE_KEY, TABLES_STORAGE_KEY } from "../../lib";
 
 function isLocalhostHost() {
   return (
@@ -68,6 +12,7 @@ function isLocalhostHost() {
 
 export default function LocalhostCharacterSeed() {
   const { setCharacters } = useCharacters();
+  const { setTables } = useTables();
 
   useEffect(() => {
     if (!isLocalhostHost()) {
@@ -76,10 +21,13 @@ export default function LocalhostCharacterSeed() {
 
     localStorage.setItem(
       CHARACTERS_STORAGE_KEY,
-      JSON.stringify(localhostCharacters),
+      JSON.stringify(START_CHARACTERS),
     );
-    setCharacters(localhostCharacters);
-  }, [setCharacters]);
+    setCharacters(START_CHARACTERS);
+
+    localStorage.setItem(TABLES_STORAGE_KEY, JSON.stringify(START_TABLES));
+    setTables(START_TABLES);
+  }, [setCharacters, setTables]);
 
   return null;
 }
