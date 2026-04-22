@@ -6,13 +6,12 @@ import {
   type CSSProperties,
 } from "react";
 import type { PointerEvent } from "react";
-import type { Table as TableData } from "../context/TablesContext";
-import Table from "./Table";
+import TableComponent from "./Table";
 
 type RollTableProps = {
   onEdit: () => void;
   onDelete: () => void;
-  table: TableData;
+  table: Table;
 };
 
 export default function RollTable({ onDelete, onEdit, table }: RollTableProps) {
@@ -66,7 +65,7 @@ export default function RollTable({ onDelete, onEdit, table }: RollTableProps) {
   const rightEntries = table.entries.slice(midpoint);
 
   const tableBody = !hasManyEntries ? (
-    <Table caption={table.dice}>
+    <TableComponent caption={`${table.noOfDice}d${table.dieType}`}>
       <thead>
         <tr>
           <th scope="col">Roll</th>
@@ -74,16 +73,20 @@ export default function RollTable({ onDelete, onEdit, table }: RollTableProps) {
         </tr>
       </thead>
       <tbody>
-        {table.entries.map((entry, index) => (
-          <tr key={`${entry.roll}-${index}`}>
-            <td>{entry.roll}</td>
+        {table.entries.map((entry) => (
+          <tr key={`${entry.start}-${entry.end}`}>
+            <td>
+              {entry.start === entry.end
+                ? entry.start
+                : `${entry.start}-${entry.end}`}
+            </td>
             <td>{entry.effect}</td>
           </tr>
         ))}
       </tbody>
-    </Table>
+    </TableComponent>
   ) : (
-    <Table caption={table.dice}>
+    <TableComponent caption={`${table.noOfDice}d${table.dieType}`}>
       <thead>
         <tr>
           <th scope="col">Roll</th>
@@ -97,16 +100,26 @@ export default function RollTable({ onDelete, onEdit, table }: RollTableProps) {
           const rightEntry = rightEntries[index];
 
           return (
-            <tr key={`split-${index}-${leftEntry.roll}`}>
-              <td>{leftEntry.roll}</td>
+            <tr key={`split-${index}-${leftEntry.start}-${leftEntry.end}`}>
+              <td>
+                {leftEntry.start === leftEntry.end
+                  ? leftEntry.start
+                  : `${leftEntry.start}-${leftEntry.end}`}
+              </td>
               <td>{leftEntry.effect}</td>
-              <td>{rightEntry?.roll ?? ""}</td>
+              <td>
+                {rightEntry
+                  ? rightEntry.start === rightEntry.end
+                    ? rightEntry.start
+                    : `${rightEntry.start}-${rightEntry.end}`
+                  : ""}
+              </td>
               <td>{rightEntry?.effect ?? ""}</td>
             </tr>
           );
         })}
       </tbody>
-    </Table>
+    </TableComponent>
   );
 
   return (
