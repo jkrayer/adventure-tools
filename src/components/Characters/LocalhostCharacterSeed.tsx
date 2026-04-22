@@ -19,14 +19,20 @@ export default function LocalhostCharacterSeed() {
       return;
     }
 
-    localStorage.setItem(
-      CHARACTERS_STORAGE_KEY,
-      JSON.stringify(START_CHARACTERS),
-    );
-    setCharacters(START_CHARACTERS);
+    const storedCharacters = localStorage.getItem(CHARACTERS_STORAGE_KEY);
+    if (storedCharacters === null) {
+      localStorage.setItem(
+        CHARACTERS_STORAGE_KEY,
+        JSON.stringify(START_CHARACTERS),
+      );
+      setCharacters(START_CHARACTERS);
+    }
 
-    localStorage.setItem(TABLES_STORAGE_KEY, JSON.stringify(START_TABLES));
-    setTables(START_TABLES);
+    const storedTables = localStorage.getItem(TABLES_STORAGE_KEY);
+    if (storedTables === null) {
+      localStorage.setItem(TABLES_STORAGE_KEY, JSON.stringify(START_TABLES));
+      setTables(START_TABLES);
+    }
   }, [setCharacters, setTables]);
 
   return null;
