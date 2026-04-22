@@ -3,7 +3,7 @@ import Form from "../Form.tsx";
 import Input from "../Input.tsx";
 import Label from "../Label.tsx";
 import Flex from "../Flex.tsx";
-import { useCharacters, type Character } from "../../context/CharactersContext";
+import { useCharacters } from "../../context/CharactersContext";
 
 type CharacterFormProps = {
   editingCharacter?: Character | null;

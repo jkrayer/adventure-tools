@@ -1,9 +1,9 @@
 import { useState } from "react";
 import CharacterCard from "./CharacterCard/CharacterCard";
 import CharacterForm from "./CharacterForm";
-import Modal from "../Modal";
 import { AddButton } from "../CircleButton";
-import { useCharacters, type Character } from "../../context/CharactersContext";
+import Modal from "../Modal";
+import { useCharacters } from "../../context/CharactersContext";
 
 export default function Characters() {
   const { characters, deleteCharacter, updateCharacterHP } = useCharacters();
