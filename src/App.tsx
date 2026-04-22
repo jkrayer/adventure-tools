@@ -1,7 +1,7 @@
 import * as Tray from "./components/ActionTray";
 import Characters from "./components/Characters/Characters.tsx";
-import LocalhostCharacterSeed from "./components/Characters/LocalhostCharacterSeed";
 import DungeonTimeTracker from "./components/DungeonTimeTracker/DungeonTimeTracker";
+import WelcomeSeedModal from "./components/WelcomeSeedModal";
 import { CharactersProvider } from "./context/CharactersContext";
 import { TablesProvider } from "./context/TablesContext";
 import ToolBar from "./components/ToolBar/ToolBar";
@@ -10,7 +10,7 @@ function App() {
   return (
     <TablesProvider>
       <CharactersProvider>
-        <LocalhostCharacterSeed />
+        <WelcomeSeedModal />
         <Tray.Characters>
           <Characters />
         </Tray.Characters>
