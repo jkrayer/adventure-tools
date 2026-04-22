@@ -10,4 +10,14 @@ declare global {
     dieType: dieType;
     entries: { start: number; end: number; effect: string }[];
   };
+
+  type Character = {
+    id: number;
+    ac: number;
+    character: string;
+    currentHP: number;
+    link: string;
+    maxHP: number;
+    player: string;
+  };
 }

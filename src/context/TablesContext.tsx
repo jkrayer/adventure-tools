@@ -5,7 +5,6 @@ import {
   type ReactNode,
   type SetStateAction,
 } from "react";
-import { START_TABLES } from "../data/tables";
 import { TABLES_STORAGE_KEY, useSyncState } from "../lib";
 
 type TablesContextValue = {
@@ -23,10 +22,7 @@ type TablesContextValue = {
 const TablesContext = createContext<TablesContextValue | undefined>(undefined);
 
 export function TablesProvider({ children }: { children: ReactNode }) {
-  const [tables, setTables] = useSyncState<Table[]>(
-    TABLES_STORAGE_KEY,
-    START_TABLES,
-  );
+  const [tables, setTables] = useSyncState<Table[]>(TABLES_STORAGE_KEY, []);
 
   const getTables = () => tables;
 
